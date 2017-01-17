@@ -3,12 +3,22 @@
   <component name="issues">
     <option name="index">
       <map>
+        <entry key="/Dummy.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/api/comments.php">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/api/submit.php">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/doc/编程思想.md">
           <value>
             <set />
           </value>
@@ -24,6 +34,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/pages/official/index.html">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/pages/official2/index.html">
           <value>
             <set />
           </value>
@@ -74,6 +89,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/official/tutorial9.js">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/official2/index.js">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/official2/index2.js">
           <value>
             <set />
           </value>
