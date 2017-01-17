@@ -1,0 +1,29 @@
+{
+  "name": "react-learning",
+  "version": "1.0.0",
+  "description": "react学习过程中所涉及到的项目实践和笔记",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wind-direction/react-learning.git"
+  },
+  "keywords": [
+    "learning",
+    "react"
+  ],
+  "author": "wind.direction.work@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wind-direction/react-learning/issues"
+  },
+  "homepage": "https://github.com/wind-direction/react-learning#readme",
+  "dependencies": {
+    "babel-preset-react": "^6.16.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "webpack": "^1.14.0"
+  }
+}
