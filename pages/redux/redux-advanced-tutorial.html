@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redux进阶示例</title>
+    <script src="//cdn.bootcss.com/redux/3.5.2/redux.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script>
+    var $container = document.getElementById('container');
+
+    var func1 = function(num){
+        $container.innerHTML += '<p><small>func1 获得参数:' + num + '</small></p>';
+        return num + 1;
+    };
+
+    var func2 = function(num){
+        $container.innerHTML += '<p><small>func2 获得参数:' + num + '</small></p>';
+        return num + 2;
+    };
+
+    var func3 = function(num){
+        $container.innerHTML += '<p><small>func3 获得参数:' + num + '</small></p>';
+        return num + 3;
+    };
+
+    var re1 = func3(func2(func1(0)));
+    $container.innerHTML += '<p>re1:' + re1 + '</p>';
+    $container.innerHTML += '<p>===============</p>';
+
+    var re2 = Redux.compose(func3, func2, func1)(0);
+    $container.innerHTML += '<p>re2:'+re2+'</p>';
+</script>
+</body>
+</html>
