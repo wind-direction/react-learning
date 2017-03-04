@@ -7,7 +7,6 @@
 
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-console.log(path.join(__dirname, 'dist'));
 
 module.exports = {
     entry : path.join(__dirname, 'index'),
@@ -24,6 +23,8 @@ module.exports = {
         ]
     },
     plugins : [
-        new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin({
+            title : 'user Plugin'
+        })
     ]
 };
