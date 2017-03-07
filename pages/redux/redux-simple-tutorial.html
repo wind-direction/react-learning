@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>redux-基础实例</title>
+    <script src="//cdn.bootcss.com/redux/3.5.2/redux.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script>
+    var $container = document.getElementById('container');
+    var inc = function() {
+        return { type : 'INCREMENT' };
+    };
+
+    var dec = function() {
+      return { type : 'DECREMENT' };
+    };
+
+    var reducer = function(state, action){
+        state = state || {counter : 0};
+        switch (action.type){
+            case 'INCREMENT' : return { counter : state.counter + 1 };
+            case 'DECREMENT' : return { counter : state.counter - 1 };
+            default : return state;
+        }
+    };
+
+    var store = Redux.createStore(reducer);
+    $container.innerHTML += '<p>'+JSON.stringify(store.getState())+'</p>';
+
+    store.dispatch(inc());
+    $container.innerHTML += '<p>'+JSON.stringify(store.getState())+'</p>';
+
+    store.dispatch(inc());
+    $container.innerHTML += '<p>'+JSON.stringify(store.getState())+'</p>';
+
+    store.dispatch(dec());
+    $container.innerHTML += '<p>'+JSON.stringify(store.getState())+'</p>';
+
+</script>
+</body>
+</html>
