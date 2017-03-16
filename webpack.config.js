@@ -32,16 +32,13 @@ module.exports = {
         progress : true,
     },
     module : {
-        //配置preLoaders,将eslint添加进入
-        preLoaders : [
+        //配置loader，将Babel添加进去
+        loaders : [
             {
                 test : /\.jsx?$/,
                 loaders : ['eslint'],
                 include : APP_PATH
-            }
-        ],
-        //配置loader，将Babel添加进去
-        loaders : [
+            },
             {
                 test : /\.jsx!$/,
                 loaders : ['babel'],
