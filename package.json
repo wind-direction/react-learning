@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "西愿星采购系统",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/wind_direction/west-wish-start.git"
@@ -31,6 +28,13 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
-    "react": "^15.4.2"
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server --hot"
   }
 }
