@@ -48,3 +48,8 @@ npm link webpack-dev-server
 #启动服务
 webpack-dev-server --host 0.0.0.0 --port 8080 --watch-poll
 ```
+
+## webpack的2.X版本支持
+
+删除 module中的preLoaders 和postLoaders
+并且限制了module.exports的第一层key, 很多属性变成了unknow property的警告。具体的变更请查看[webpack版本变更](https://github.com/webpack/webpack/releases/tag/v2.1.0-beta.23)
