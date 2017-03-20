@@ -2,5 +2,10 @@
   "extends": "airbnb",
   "rules": {
     "comma-dangle": ["error", "never"]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jasmine": true
   }
 }
