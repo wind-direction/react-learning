@@ -21,5 +21,6 @@ var getLocalIps = function() {
 
 module.exports = {
   getLocalIps : getLocalIps
-}
+};
+
 

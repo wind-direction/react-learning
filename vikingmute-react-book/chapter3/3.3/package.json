@@ -5,11 +5,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/wind_direction/west-wish-start.git"
+    "url": "git+ssh://git@github.com:wind-direction/react-learning.git"
   },
   "author": "wind.direction.work@gmail.com",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/winde_direction/west-wish-start#readme",
+  "homepage": "https://github.com/wind-direction/react-learning#readme",
   "devDependencies": {
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
