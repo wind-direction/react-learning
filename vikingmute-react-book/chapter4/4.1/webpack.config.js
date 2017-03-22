@@ -32,29 +32,27 @@ module.exports = {
     inline: true
   },
   module: {
-    rules: [
+    loaders: [
+      //配置preLoaders,将eslint添加进入
       {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        use: [
-          { loader: "eslint-loader" }
-        ],
-        include: APP_PATH,
-        exclude: [/node_modules/]
+        enforce : 'pre',
+        test : /\.jsx?$/,
+        loaders : ['eslint-loader'],
+        include : APP_PATH,
+        exclude : [/node_modules/]
       },
+      //配置loader，将Babel添加进去
       {
-        test: /\.jsx?$/,
-        use: [
-          { loader: "babel-loader" }
-        ],
-        include: APP_PATH
+        test : /\.jsx?$/,
+        loaders : ['babel-loader'],
+        include : APP_PATH
       },
       {
         test: /\.less$/,
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" },
-          { loader: "less-loader"}
+          { loader: "less-loader" }
         ]
       },
       {
@@ -95,7 +93,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx','.less','.scss']
+    extensions: ['.js', '.jsx', '.less', '.scss']
   },
   resolveLoader: {
     alias: {

@@ -3,8 +3,8 @@ import 'bootstrap/less/bootstrap.less';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Deskmark from '../components/Deskmark';
+import DeskMark from '../components/DeskMark';
 
 const app = document.createElement('div');
 document.body.appendChild(app);
-ReactDOM.render(<Deskmark />, app);
+ReactDOM.render(<DeskMark />, app);

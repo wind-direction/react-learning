@@ -1,22 +1,26 @@
 /**
- * @file: 
+ * @file:
  * Created by wind on 17/3/21.
  * @todo:
  */
 
-import './style.scss';
+import "babel-polyfill";
+import React from "react";
+import uuid from "uuid";
 
-import React from 'react';
-import uuid from 'uuid';
+import List from "../List";
+import CreateBar from "../CreateBar";
+import ItemShowLayer from "../ItemShowLayer";
+import ItemEditor from "../ItemEditor";
 
-import List from '../List';
-import CreateBar from '../CreateBar';
-import ItemShowLayer from '../ItemShowLayer';
-import ItemEditor from '../ItemEditor';
+import "./style.scss";
 
-class Deskmark extends React.Component {
-  constructor(props) {
-    super(props);
+
+class DeskMark extends React.Component {
+  constructor() {
+
+    super();
+
     this.state = {
       items: [],
       selectedId: null,
@@ -35,7 +39,7 @@ class Deskmark extends React.Component {
    * @param id
    */
   selectItem(id) {
-    if(id == this.state.selectedId) {
+    if(id === this.state.selectedId) {
       return;
     }
 
@@ -107,4 +111,4 @@ class Deskmark extends React.Component {
   }
 }
 
-export default Deskmark;
+export default DeskMark;
