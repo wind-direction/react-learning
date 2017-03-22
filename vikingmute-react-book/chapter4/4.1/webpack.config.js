@@ -33,25 +33,60 @@ module.exports = {
   },
   module: {
     rules: [
-      //配置preLoaders,将eslint添加进入
       {
         enforce: 'pre',
         test: /\.jsx?$/,
-        loaders: ['eslint-loader'],
+        use: [
+          { loader: "eslint-loader" }
+        ],
         include: APP_PATH,
         exclude: [/node_modules/]
       },
-      //配置loader，将Babel添加进去
       {
         test: /\.jsx?$/,
-        loaders: ['babel-loader'],
+        use: [
+          { loader: "babel-loader" }
+        ],
         include: APP_PATH
       },
-      // LESS
       {
         test: /\.less$/,
-        loaders: ['style-loader','css-loader','less-loader']
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+          { loader: "less-loader"}
+        ]
       },
+      {
+        test: /\.scss$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+          { loader: "sass-loader" }
+        ]
+      },
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          { loader : 'url-loader', options : { limit : 10000, mimetype : 'application/font-woff' } }
+        ]
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          { loader : 'url-loader', options : { limit : 10000, mimetype : 'application/octet-stream' } }
+        ]
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          { loader : 'url-loader', options : { limit : 10000, mimetype : 'image/svg+xml' } }
+        ]
+      }
     ]
   },
   plugins: [
@@ -60,6 +95,11 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx','.less','.scss']
+  },
+  resolveLoader: {
+    alias: {
+      'less-loader': path.resolve(ROOT_PATH,'node_modules/less-loader/dist/index.js')
+    }
   }
 };
