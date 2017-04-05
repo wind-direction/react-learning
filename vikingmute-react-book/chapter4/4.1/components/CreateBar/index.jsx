@@ -1,5 +1,5 @@
 /**
- * @file: 
+ * @file: CreateBar/index.jsx
  * Created by wind on 17/3/21.
  * @todo:
  */
@@ -14,9 +14,9 @@ const propType = {
 
 function CreateBar({ onClick }) {
   return (
-    <a href="#" onClick={onClick} className="list-group-item create-bar-component">
+    <button onClick={onClick} className="list-group-item create-bar-component">
       + 创建新的文章
-    </a>
+    </button>
   );
 }
 

@@ -1,14 +1,14 @@
 /**
- * @file: 
+ * @file: ItemEditor/index.jsx
  * Created by wind on 17/3/21.
- * @todo:
+ * @todo: 编辑组件
  */
 
 import React, { PropTypes } from 'react';
 import './style.scss';
 
 const propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired
 };
@@ -23,9 +23,9 @@ class ItemEditor extends React.Component {
     };
 
     // 判断是否已经选择了selectId,渲染按钮不同的文本
-    let saveText = item.id ? '保存' : '创建';
+    const saveText = item.id ? '保存' : '创建';
     // 传入回调包裹方法
-    let save = () => {
+    const save = () => {
       onSave({
         ...item,
         // this.refs可以获得真实的dom节点，从而取得value
@@ -42,7 +42,7 @@ class ItemEditor extends React.Component {
         </div>
         <div className="edit-area">
           <input ref={(title) => { this.title = title; }} placeholder="请填写标题" defaultValue={item.title} />
-          <textarea ref={(content) => { this.content = content; }} placeholder="请填写内容" defaultValue={item.content}></textarea>
+          <textarea ref={(content) => { this.content = content; }} placeholder="请填写内容" defaultValue={item.content} />
         </div>
       </div>
     );

@@ -8,11 +8,11 @@ import React, { PropTypes } from 'react';
 import ListItem from '../ListItem';
 
 const propTypes = {
-  items : PropTypes.array.isRequired
+  items: PropTypes.array.isRequired
 };
 
 function List({ items }) {
-  items = items.map(
+  const itemsContent = items.map(
     item => (
       <ListItem item={item} key={item.id} />
     )
@@ -20,9 +20,9 @@ function List({ items }) {
 
   return (
     <div className="list-component col-md-4 list-group">
-      {items}
+      {itemsContent}
     </div>
-  )
+  );
 }
 
 List.propTypes = propTypes;

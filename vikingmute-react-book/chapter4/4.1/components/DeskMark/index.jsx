@@ -4,21 +4,19 @@
  * @todo:
  */
 
-import "babel-polyfill";
-import React from "react";
-import uuid from "uuid";
+import React from 'react';
+import uuid from 'uuid';
 
-import List from "../List";
-import CreateBar from "../CreateBar";
-import ItemShowLayer from "../ItemShowLayer";
-import ItemEditor from "../ItemEditor";
+import CreateBar from '../CreateBar';
+import List from '../List';
+import ItemEditor from '../ItemEditor';
+import ItemShowLayer from '../ItemShowLayer';
 
-import "./style.scss";
+import './style.scss';
 
 
 class DeskMark extends React.Component {
   constructor() {
-
     super();
 
     this.state = {
@@ -39,7 +37,7 @@ class DeskMark extends React.Component {
    * @param id
    */
   selectItem(id) {
-    if(id === this.state.selectedId) {
+    if (id === this.state.selectedId) {
       return;
     }
 
@@ -51,22 +49,23 @@ class DeskMark extends React.Component {
 
   /**
    * 新增条目
-   * @param item
+   * @param Item
    */
-  saveItem(item) {
+  saveItem(Item) {
     // item是编辑器返回的对象,里面包括标题和内容
+    const item = Item;
 
     // 当前的items state
     let items = this.state.items;
 
     item.id = uuid.v4();
     item.time = new Date().getTime();
+
     // 新的state
     items = [...items, item];
-    //更新新的state
-    this.setState({
-      items: items
-    });
+
+    // 更新新的state
+    this.setState({ items });
   }
 
   /**
@@ -80,11 +79,54 @@ class DeskMark extends React.Component {
     });
   }
 
-  cancelEdit() {}
+  cancelEdit() {
+    this.setState({ editing: false });
+  }
 
-  editItem() {}
+  editItem(Item) {
+    const item = Item;
 
-  deleteItem() {}
+    let items = this.state.items;
+
+    // new item
+    if (!item.id) {
+      items = [...items, {
+        ...item,
+        id: uuid.v4(),
+        time: new Date().getTime()
+      }];
+      // existed item
+    } else {
+      items = items.map(
+        exist => (
+          exist.id === item.id
+            ? {
+              ...exist,
+              ...item
+            }
+            : exist
+        )
+      );
+    }
+
+    this.setState({
+      items,
+      selectedId: item.id,
+      editing: false
+    });
+  }
+
+  deleteItem(id) {
+    if (!id) {
+      return;
+    }
+
+    this.setState({
+      items: this.state.items.filter(
+        result => result.id !== id
+      )
+    });
+  }
 
   render() {
     const { items, selectedId, editing } = this.state;
@@ -92,18 +134,34 @@ class DeskMark extends React.Component {
     // 选出当前被选中的文章
     const selected = selectedId && items.find(item => item.id === selectedId);
     // 根据editing状态来决定要显示ItemEditor 组件还是ItemShowLayer 组件， 并且将回调方法都传入组件中
+    const mainPart = editing
+      ? (
+        <ItemEditor
+          item={selected}
+          onSave={this.saveItem}
+          onCancel={this.cancelEdit}
+        />
+      )
+      : (
+        <ItemShowLayer
+          item={selected}
+          onEdit={this.editItem}
+          onDelete={this.deleteItem}
+        />
+      );
     // 将交互回调添加到组件中
     return (
       <section className="deskmark-component">
         <div className="container">
           <div className="row">
-            <CreateBar onClick={this.createItem} />
-            <List items={this.state.items} onSelect={this.selectItem} />
-            {editing ? (
-              <ItemEditor item={selected} onSave={this.saveItem} onCancel={this.cancelEdit} />
-            ) : (
-              <ItemShowLayer item={selected} onEdit={this.editItem} onDelete={this.deleteItem} />
-            )}
+            <div className="col-md-4 list-group">
+              <CreateBar onClick={this.createItem} />
+              <List
+                items={this.state.items}
+                onSelect={this.selectItem}
+              />
+            </div>
+            {mainPart}
           </div>
         </div>
       </section>

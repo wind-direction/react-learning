@@ -13,6 +13,7 @@ var tools = require('./tools');
 var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'app');
 var BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
+var COMPONENT_PATH = path.resolve(ROOT_PATH, 'components');
 
 module.exports = {
   entry: {
@@ -38,14 +39,13 @@ module.exports = {
         enforce : 'pre',
         test : /\.jsx?$/,
         loaders : ['eslint-loader'],
-        include : APP_PATH,
-        exclude : [/node_modules/]
+        include : [ APP_PATH, COMPONENT_PATH ]
       },
       //配置loader，将Babel添加进去
       {
         test : /\.jsx?$/,
         loaders : ['babel-loader'],
-        include : APP_PATH
+        include :  [ APP_PATH, COMPONENT_PATH ]
       },
       {
         test: /\.less$/,

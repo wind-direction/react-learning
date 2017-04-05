@@ -22,20 +22,11 @@
 $ cd ~
 $ wget https://nodejs.org/dist/latest/node-v7.7.3-linux-x64.tar.xz
 $ xz -d node-v7.7.3-linux-x64.tar.xz
-$ mv node-v7.7.3-linux-x64.tar /opt/node-v7.7.3-linux-x64.tar
-$ cd /opt/
 $ tar -xvf node-v7.7.3-linux-x64.tar
-$ mv node-v7.7.3-linux-x64 node
-# 在/etc/profile.d/中创建node-config.sh
-$ vim /etc/profile.d/node-config.sh
-
-#!/bin/sh
-
-export NODE_HOME=/opt/node
-export PATH=$NODE_HOME/bin:$PATH
-
-$ source /etc/profile.d/node-config.sh
-$ node -v
+$ mv node-v7.7.3-linux-x64 /usr/local/lib/node
+$ cd /usr/bin/
+$ ln -s ../local/lib/node/bin/node node
+$ ln -s ../local/lib/node/bin/npm npm
 ```
 
 

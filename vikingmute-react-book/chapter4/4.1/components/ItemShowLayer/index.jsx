@@ -1,21 +1,21 @@
 /**
- * @file: 
+ * @file: ItemShowLayer/index.jsx
  * Created by wind on 17/3/21.
- * @todo:
+ * @todo: 展示组件
  */
 
 import React, { PropTypes } from 'react';
 import marked from 'marked';
 
 const propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
 };
 
 function ItemShowLayer({ item, onEdit, onDelete }) {
   // 如果没有传入Item, 直接返回一些静态的提示
-  if(!item || !item.id){
+  if (!item || !item.id) {
     return (
       <div className="col-md-8 item-show-layer-component">
         <div className="no-select">请选择左侧列表里面的文章</div>
@@ -34,7 +34,7 @@ function ItemShowLayer({ item, onEdit, onDelete }) {
       </div>
       <h2>{item.title}</h2>
       <div className="item-text">
-        <div dangerouslySetInnerHTML={{__html: content}} />
+        <div dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );
