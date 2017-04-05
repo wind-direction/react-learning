@@ -25,11 +25,12 @@ class DeskMark extends React.Component {
       editing: false
     };
 
-    this.createItem = this.createItem.bind(this);
+    this.selectItem = this.selectItem.bind(this);
     this.saveItem = this.saveItem.bind(this);
-    this.cancelEdit = this.cancelEdit.bind(this);
-    this.editItem = this.editItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.createItem = this.createItem.bind(this);
+    this.editItem = this.editItem.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
   }
 
   /**
@@ -152,9 +153,12 @@ class DeskMark extends React.Component {
     // 将交互回调添加到组件中
     return (
       <section className="deskmark-component">
+        <nav className="navbar navbar-fixed-top navbar-dark bg-inverse">
+          <span className="navbar-brand">Deskmark App</span>
+        </nav>
         <div className="container">
           <div className="row">
-            <div className="col-md-4 list-group">
+            <div className="col-md-3 list-group">
               <CreateBar onClick={this.createItem} />
               <List
                 items={this.state.items}
