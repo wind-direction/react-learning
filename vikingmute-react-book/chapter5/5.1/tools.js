@@ -1,5 +1,5 @@
 /**
- * Created by wind on 17/3/17.
+ * Created by wind on 17/4/6.
  */
 var os = require('os');
 
@@ -22,5 +22,3 @@ var getLocalIps = function() {
 module.exports = {
   getLocalIps : getLocalIps
 };
-
-
