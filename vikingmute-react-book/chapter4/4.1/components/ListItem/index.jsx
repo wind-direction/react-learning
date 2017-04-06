@@ -21,10 +21,10 @@ function ListItem({ item, onClick }) {
   // 返回JSX结构
   return (
     <button className="list-group-item item-component" onClick={onClick}>
-      <span className="label label-default label-pill pull-xs-right">
-        {formatTime}
-      </span>
       <span className="item-title">{item.title}</span>
+      <span className="pull-right text-muted small">
+        <em>{formatTime}</em>
+      </span>
     </button>
   );
 }

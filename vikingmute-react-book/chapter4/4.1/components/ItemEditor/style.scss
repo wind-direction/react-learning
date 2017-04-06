@@ -4,13 +4,14 @@
 
 .item-editor-component {
   padding: 10px;
-  border-top: 1px solid #efefef;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   position: relative;
-  margin-top: 10px;
+  background-color: #ffffff;
 
   .control-area {
     position: absolute;
-    top: 0;
+    top: 15px;
     right: 0;
 
     button {

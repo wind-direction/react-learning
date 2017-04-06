@@ -5,6 +5,7 @@
  */
 
 import React, { PropTypes } from 'react';
+
 import './style.scss';
 
 const propTypes = {
@@ -35,7 +36,7 @@ class ItemEditor extends React.Component {
     };
 
     return (
-      <div className="col-md-9 item-edit-component">
+      <div className="col-md-9 item-editor-component">
         <div className="control-area">
           <button onClick={save} className="btn btn-success">{saveText}</button>
           <button onClick={onCancel} className="btn btn-secondary">取消</button>

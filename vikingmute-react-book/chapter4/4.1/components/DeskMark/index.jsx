@@ -53,40 +53,7 @@ class DeskMark extends React.Component {
    * @param Item
    */
   saveItem(Item) {
-    // item是编辑器返回的对象,里面包括标题和内容
     const item = Item;
-
-    // 当前的items state
-    let items = this.state.items;
-
-    item.id = uuid.v4();
-    item.time = new Date().getTime();
-
-    // 新的state
-    items = [...items, item];
-
-    // 更新新的state
-    this.setState({ items });
-  }
-
-  /**
-   * 创建一个新的条目
-   */
-  createItem() {
-    // 将editing置为true,并且selectedId为null，表示要创建一个新的文章
-    this.setState({
-      selectedId: null,
-      editing: true
-    });
-  }
-
-  cancelEdit() {
-    this.setState({ editing: false });
-  }
-
-  editItem(Item) {
-    const item = Item;
-
     let items = this.state.items;
 
     // new item
@@ -117,6 +84,28 @@ class DeskMark extends React.Component {
     });
   }
 
+  /**
+   * 创建一个新的条目
+   */
+  createItem() {
+    // 将editing置为true,并且selectedId为null，表示要创建一个新的文章
+    this.setState({
+      selectedId: null,
+      editing: true
+    });
+  }
+
+  cancelEdit() {
+    this.setState({ editing: false });
+  }
+
+  editItem(id) {
+    this.setState({
+      selectedId: id,
+      editing: true
+    });
+  }
+
   deleteItem(id) {
     if (!id) {
       return;
@@ -133,7 +122,7 @@ class DeskMark extends React.Component {
     const { items, selectedId, editing } = this.state;
 
     // 选出当前被选中的文章
-    const selected = selectedId && items.find(item => item.id === selectedId);
+    const selected = selectedId ? items.find(item => item.id === selectedId) : {};
     // 根据editing状态来决定要显示ItemEditor 组件还是ItemShowLayer 组件， 并且将回调方法都传入组件中
     const mainPart = editing
       ? (

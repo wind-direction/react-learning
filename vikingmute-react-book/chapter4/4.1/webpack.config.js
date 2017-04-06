@@ -99,5 +99,6 @@ module.exports = {
     alias: {
       'less-loader': path.resolve(ROOT_PATH,'node_modules/less-loader/dist/index.js')
     }
-  }
+  },
+  watchOptions: { poll: 1000 }
 };

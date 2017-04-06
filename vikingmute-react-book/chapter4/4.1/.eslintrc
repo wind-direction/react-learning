@@ -15,8 +15,9 @@
   "rules": {
     "comma-dangle": ["error", "never"],
     "semi" : ["error","always"],
-    "react/prefer-stateless-function": 0,
-    "react/no-array-index-key": 0
+    "react/prefer-stateless-function": "off",
+    "react/no-array-index-key": "off",
+    "react/no-danger" : "off"
   },
   "env": {
     "browser": true,
