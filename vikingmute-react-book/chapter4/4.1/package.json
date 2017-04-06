@@ -53,6 +53,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "dev": "webpack-dev-server --hot"
+    "dev": "webpack-dev-server --hot",
+    "test": "NODE_ENV=production mocha --compilers js:babel-core/register --require ignore-styles"
   }
 }
