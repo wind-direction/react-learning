@@ -1,11 +1,9 @@
 import React from 'react';
 import uuid from 'uuid';
-
-import TodoAction from '../actions/TodoAction';
-import TodoStore from '../stores/TodoStore';
-
 import List from './List';
 import CreateButton from './CreateButton';
+import TodoStore from '../stores/TodoStore';
+import TodoAction from '../actions/TodoAction';
 
 class Todo extends React.Component {
   constructor(props) {

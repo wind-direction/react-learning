@@ -32,8 +32,14 @@ const TodoStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register((action) => {
   switch (action.actionType) {
-    case 'CREATE_TODO': TodoStore.addTodo(action.todo); break;
-    case 'DELETE_TODO': TodoStore.deleteTodo(action.id); break;
+    case 'CREATE_TODO':
+      TodoStore.addTodo(action.todo); //store发生变化的时候，则触发change事件
+      TodoStore.emitChange();
+      break;
+    case 'DELETE_TODO':
+      TodoStore.deleteTodo(action.id);
+      TodoStore.emitChange();
+      break;
     default: break;
   }
 });
