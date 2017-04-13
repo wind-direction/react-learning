@@ -9,7 +9,7 @@ var APP_PATH = path.resolve(ROOT_PATH, 'app');
 
 module.exports = {
   entry: {
-    app: path.resolve(APP_PATH, 'index.jax')
+    app: path.resolve(APP_PATH, 'index.jsx')
   },
   output: {
     path: BUILD_PATH,
@@ -36,44 +36,6 @@ module.exports = {
         test : /\.jsx?$/,
         loaders : ['babel-loader'],
         include : APP_PATH
-      },
-      {
-        test: /\.less$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-          { loader: "less-loader" }
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-          { loader: "sass-loader" }
-        ]
-      },
-      {
-        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          { loader : 'url-loader', options : { limit : 10000, mimetype : 'application/font-woff' } }
-        ]
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          { loader : 'url-loader', options : { limit : 10000, mimetype : 'application/octet-stream' } }
-        ]
-      },
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader'
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          { loader : 'url-loader', options : { limit : 10000, mimetype : 'image/svg+xml' } }
-        ]
       }
     ]
   },
@@ -83,12 +45,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.less', '.scss']
-  },
-  resolveLoader: {
-    alias: {
-      'less-loader': path.resolve(ROOT_PATH,'node_modules/less-loader/dist/index.js')
-    }
+    extensions: ['.js', '.jsx']
   },
   watchOptions: { poll: 1000 }
 };
