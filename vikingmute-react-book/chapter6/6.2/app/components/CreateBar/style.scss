@@ -1,0 +1,10 @@
+.list-component {
+  .create-bar-component {
+    background: #0275b8;
+    color: #fff;
+    &:hover {
+      background: darken(#0275b8, 20%);
+      color: #fff;
+    }
+  }
+}
