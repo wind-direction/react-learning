@@ -13,12 +13,6 @@ class Map extends React.Component {
     super(props);
     this.id = props.id || 'allmap';
   }
-  componentWillMount() {
-    const script1 = document.createElement('script');
-    script1.src = 'http://api.map.baidu.com/getscript?v=2.0&ak=cQoqZZ4o1Yy96sEiIlIVkkek&services=&t=20170411141812';
-    script1.type = 'text/javascript';
-    document.body.appendChild(script1);
-  }
   /**
    * @method componentDidMount
    */

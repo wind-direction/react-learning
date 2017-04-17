@@ -77,12 +77,10 @@ class DeskMark extends React.Component {
             </div>
             {mainPart}
           </div>
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="panel panel-default">
-                <div className="panel-body">
-                  <Map id={id} style={{ height: 300 }} onSelect={this.onSelect} />
-                </div>
+          <div className="row" style={{ marginTop: 30 }}>
+            <div className="col-md-12" style={{ padding: 0 }}>
+              <div className="card card-block">
+                <Map id={id} style={{ height: 300 }} onSelect={this.onSelect} />
               </div>
             </div>
           </div>
