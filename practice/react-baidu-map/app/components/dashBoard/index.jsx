@@ -5,14 +5,9 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import TopNav from '../topNav';
-import Content from '../Content';
-
-const propTypes = {
-  position: PropTypes.object.isRequired
-};
+import { Content } from '../content';
 
 class dashBoard extends React.Component {
   render() {
@@ -24,7 +19,5 @@ class dashBoard extends React.Component {
     );
   }
 }
-
-dashBoard.propTypes = propTypes;
 
 export default dashBoard;
