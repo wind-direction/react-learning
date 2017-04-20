@@ -16,11 +16,13 @@ const defaultCreateCache = (opt) => {
 };
 export const wrapper = options => (WrappedComponent) => {
   const createCache = options.createCache || defaultCreateCache;
+  console.log('-------------------');
+  console.log(options);
+  console.log('-------------------');
 
   class Wrapper extends React.Component {
     constructor(props, context) {
       super(props, context);
-
       this.scriptCache = createCache(options);
       this.scriptCache.baidu.onLoad(this.onLoad.bind(this));
 
@@ -44,6 +46,7 @@ export const wrapper = options => (WrappedComponent) => {
         loaded: this.state.loaded,
         baidu: window.baidu
       });
+      console.log('ddd');
 
       return (
         <div>
@@ -52,7 +55,6 @@ export const wrapper = options => (WrappedComponent) => {
       );
     }
   }
-
   return Wrapper;
 };
 

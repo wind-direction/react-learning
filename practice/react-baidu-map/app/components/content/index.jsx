@@ -6,14 +6,15 @@
 
 import React from 'react';
 
-import { baiduWrapper } from '../Map';
+import { baiduWrapper } from '../baiduMap';
 import BasicMap from '../basicMap';
 
 export class Content extends React.Component {
   render() {
+    const sharedProps = {};
     return (
       <div className="container">
-        <BasicMap />
+        <BasicMap {...sharedProps} />
       </div>
     );
   }

@@ -12,22 +12,20 @@ export const ScriptCache = ((GLOBAL) => {
   return (scripts) => {
     const Cache = {};
 
-    Cache.onLoadFunc = (key) => {
-      function callFunc(callback) {
-        const stored = scriptMap.get(key);
-        if (stored) {
-          stored.promise.then(() => {
-            if (stored.error) {
-              callback(stored.error);
-            } else {
-              callback(null, stored);
-            }
-            return stored;
-          });
-        }
+    Cache.onLoadFunc = key => (callback) => {
+      const stored = scriptMap.get(key);
+      if (stored) {
+        stored.promise.then(() => {
+          if (stored.error) {
+            callback(stored.error);
+          } else {
+            callback(null, stored);
+          }
+          return stored;
+        });
+      } else {
+        // TODO
       }
-
-      return callFunc;
     };
 
     Cache.scriptTag = (key, src) => {

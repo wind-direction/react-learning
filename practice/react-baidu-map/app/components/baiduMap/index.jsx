@@ -9,7 +9,7 @@ import makeCancelable from '../lib/cancelablePromise';
 
 export { wrapper as baiduWrapper } from '../lib/baiduWrapper';
 
-class Map extends React.Component {
+class baiduMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,14 +61,14 @@ class Map extends React.Component {
   }
 }
 
-Map.propTypes = {
+baiduMap.propTypes = {
   baidu: T.objectOf,
   centerAroundCurrentLocation: T.bool,
   initialCenter: T.objectOf
 };
 
 
-Map.defaultProps = {
+baiduMap.defaultProps = {
   baidu: {},
   initialCenter: {
     lat: 116.404,
@@ -77,4 +77,4 @@ Map.defaultProps = {
   centerAroundCurrentLocation: false
 };
 
-export default Map;
+export default baiduMap;

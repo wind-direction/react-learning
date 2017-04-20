@@ -6,13 +6,13 @@
 
 import React from 'react';
 
-import Map from '../Map';
+import baiduMap from '../baiduMap';
 
 class BasicMap extends React.Component {
 
   render() {
     return (
-      <Map />
+      <baiduMap />
     );
   }
 }
