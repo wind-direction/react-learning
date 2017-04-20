@@ -5,32 +5,7 @@
  */
 import React from 'react';
 import T from 'prop-types';
-import ReactDOM from 'react-dom';
-
 import makeCancelable from '../lib/cancelablePromise';
-
-const evtNames = [
-  'ready',
-  'click',
-  'dragend',
-  'recenter',
-  'bounds_changed',
-  'center_changed',
-  'dblclick',
-  'dragstart',
-  'heading_change',
-  'idle',
-  'maptypeid_changed',
-  'mousemove',
-  'mouseout',
-  'mouseover',
-  'projection_changed',
-  'resize',
-  'rightclick',
-  'tilesloaded',
-  'tilt_changed',
-  'zoom_changed'
-];
 
 export { wrapper as baiduWrapper } from '../lib/baiduWrapper';
 
@@ -68,63 +43,38 @@ class Map extends React.Component {
   }
   loadMap() {
     if (this.props && this.props.baidu) {
-      const { baidu } = this.props;
-      const maps = baidu.maps;
-
-      const mapRef = this.refs.map;
-      const node = ReactDOM.findDOMNode(mapRef);
+      const BMap = window.BMap;
+      const mapInstance = new BMap.Map('baiduMap');
       const curr = this.state.currentLocation;
-      const center = new maps.LatLng(curr.lat, curr.lng);
-
-      const mapTypeIds = this.props.baidu.maps.MapTypeId || {};
-      const mapTypeFromProps = String(this.props.mapType).toUpperCase();
-
-      const mapConfig = Object.assign({}, {
-        mapTypeId: mapTypeIds[mapTypeFromProps],
-        center: center
-      });
-
-      Object.keys(mapConfig).forEach((key) => {
-        // Allow to configure mapConfig with 'false'
-        if (mapConfig[key] == null) {
-          delete mapConfig[key];
-        }
-      });
-
-      this.map = new maps.Map(node, mapConfig);
-
-      evtNames.forEach((e) => {
-        this.listeners[e] = this.map.addListener(e, this.handleEvent(e));
-      });
-      maps.event.trigger(this.map, 'ready');
+      mapInstance.centerAndZoom(new BMap.Point(curr.lat, curr.lng));
+      mapInstance.addControl(new BMap.MapTypeControl());
+      mapInstance.setCurrentCity('北京');
+      mapInstance.enableScrollWheelZoom(true);
     }
   }
   render() {
     return (
       <div>
-        <div>Loading map...</div>
+        <div id="baiduMap">Loading map...</div>
       </div>
     );
   }
 }
 
 Map.propTypes = {
-  baidu: T.object,
+  baidu: T.objectOf,
   centerAroundCurrentLocation: T.bool,
-  center: T.object,
-  initialCenter: T.object,
-  visible: T.bool
+  initialCenter: T.objectOf
 };
 
 
 Map.defaultProps = {
+  baidu: {},
   initialCenter: {
-    lat: 37.774929,
-    lng: -122.419416
+    lat: 116.404,
+    lng: 39.915
   },
-  center: {},
-  centerAroundCurrentLocation: false,
-  visible: true
+  centerAroundCurrentLocation: false
 };
 
 export default Map;

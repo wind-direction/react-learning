@@ -9,6 +9,7 @@ import React from 'react';
 import Map from '../Map';
 
 class BasicMap extends React.Component {
+
   render() {
     return (
       <Map />
