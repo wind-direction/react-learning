@@ -8,7 +8,7 @@ import React from 'react';
 
 function topNav() {
   return (
-    <nav className="navbar navbar-default">
+    <nav className="navbar navbar-default" style={{ marginBottom: 0 }}>
       <div className="navbar-header">
         <a className="navbar-brand">百度地图-React-demo</a>
       </div>

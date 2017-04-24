@@ -3,16 +3,15 @@
  */
 function BaiduMapWebApi(options) {
   const opts = options || {};
-  const apiKey = opts.apiKey;
-  const URL = 'http://api.map.baidu.com/api';
-  const version = opts.version || '2.0';
+  const apiKey = opts.ak;
+  const URL = 'http://api.map.baidu.com/getscript';
+  const version = opts.v || '2.0';
 
   const url = () => {
     const urlString = URL;
     const params = {
       ak: apiKey,
-      v: version,
-      callback: 'CALLBACK_NAME'
+      v: version
     };
 
     const paramsStr = Object.keys(params)

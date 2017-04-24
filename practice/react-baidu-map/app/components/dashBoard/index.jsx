@@ -7,7 +7,7 @@
 import React from 'react';
 
 import TopNav from '../topNav';
-import { Content } from '../content';
+import Content from '../content';
 
 class dashBoard extends React.Component {
   render() {

@@ -7,15 +7,15 @@ import React from 'react';
 import T from 'prop-types';
 import makeCancelable from '../lib/cancelablePromise';
 
-export { wrapper as baiduWrapper } from '../lib/baiduWrapper';
+export { wrapper } from '../lib/baiduWrapper';
 
 class baiduMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currentLocation: {
-        lat: this.props.initialCenter.lat,
-        lng: this.props.initialCenter.lng
+        lat: 116.404,
+        lng: 39.915
       }
     };
   }
@@ -41,12 +41,17 @@ class baiduMap extends React.Component {
     }
     this.loadMap();
   }
+
+  componentDidUpdate() {
+    this.loadMap();
+  }
+
   loadMap() {
-    if (this.props && this.props.baidu) {
+    if (window.BMap) {
       const BMap = window.BMap;
       const mapInstance = new BMap.Map('baiduMap');
       const curr = this.state.currentLocation;
-      mapInstance.centerAndZoom(new BMap.Point(curr.lat, curr.lng));
+      mapInstance.centerAndZoom(new BMap.Point(curr.lat, curr.lng), 11);
       mapInstance.addControl(new BMap.MapTypeControl());
       mapInstance.setCurrentCity('北京');
       mapInstance.enableScrollWheelZoom(true);
@@ -55,25 +60,18 @@ class baiduMap extends React.Component {
   render() {
     return (
       <div>
-        <div id="baiduMap">Loading map...</div>
+        <div id="baiduMap" style={{ width: '100%', height: 648 }}>Loading map...</div>
       </div>
     );
   }
 }
 
 baiduMap.propTypes = {
-  baidu: T.objectOf,
-  centerAroundCurrentLocation: T.bool,
-  initialCenter: T.objectOf
+  centerAroundCurrentLocation: T.bool
 };
 
 
 baiduMap.defaultProps = {
-  baidu: {},
-  initialCenter: {
-    lat: 116.404,
-    lng: 39.915
-  },
   centerAroundCurrentLocation: false
 };
 

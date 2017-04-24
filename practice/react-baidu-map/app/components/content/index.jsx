@@ -5,21 +5,29 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { baiduWrapper } from '../baiduMap';
-import BasicMap from '../basicMap';
+import BaiduMap, { wrapper as baiduWrapper } from '../baiduMap';
 
-export class Content extends React.Component {
+class Content extends React.Component {
   render() {
-    const sharedProps = {};
+    const sharedProps = {
+      loaded: this.props.loaded
+    };
     return (
-      <div className="container">
-        <BasicMap {...sharedProps} />
+      <div className="container-fluid" style={{ paddingLeft: 0, paddingRight: 0 }}>
+        <BaiduMap {...sharedProps} />
       </div>
     );
   }
 }
 
-export default baiduWrapper({
-  ak: 'cQoqZZ4o1Yy96sEiIlIVkkek'
-})(Content);
+Content.propTypes = {
+  loaded: PropTypes.bool
+};
+
+Content.defaultProps = {
+  loaded: false
+};
+
+export default baiduWrapper({ ak: 'cQoqZZ4o1Yy96sEiIlIVkkek' })(Content);
