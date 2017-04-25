@@ -25,12 +25,6 @@ $ ln -s ../local/lib/node/bin/npm npm
 ```
 
 
-### 安装全局依赖
-
-```bash
-npm install -g webpack webpack-dev-server
-```
-
 ## webpack的2.X版本支持
 
 在webpack的2.X版本中，删除了module中的preLoaders 和postLoaders。并且限制了module.exports的第一层key, 很多属性变成了unknow property的警告。
@@ -71,3 +65,7 @@ npm install -g webpack webpack-dev-server
   include :  [ APP_PATH, COMPONENT_PATH ]
 },
 ```
+
+## 附录
+
+[vikingmute:React全栈(Redux+Flux+webpack+Babel整合开发)](git@github.com:vikingmute/webpack-react-codes.git)
