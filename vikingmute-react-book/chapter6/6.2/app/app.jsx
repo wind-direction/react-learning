@@ -48,27 +48,6 @@ function onLoadCallBakFunction() {
     })
   )(DeskMark);
 
-  const scriptElement = document.createElement('script');
-  scriptElement.src = 'http://api.map.baidu.com/getscript?v=2.0&ak=cQoqZZ4o1Yy96sEiIlIVkkek&services=&t=20170411141812';
-  scriptElement.type = 'text/javascript';
-  document.body.appendChild(scriptElement);
-
-  function onLoadCallBakFunction() {
-    const container = document.body.appendChild(
-      document.createElement('div')
-    );
-
-    render(
-      <Provider store={store}>
-        <App />
-      </Provider>,
-      container
-    );
-  }
-
-  scriptElement.onload = onLoadCallBakFunction;
-
-
   render(
     <Provider store={store}>
       <App />
