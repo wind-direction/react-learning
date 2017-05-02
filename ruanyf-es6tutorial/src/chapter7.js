@@ -88,14 +88,50 @@ describe('5 数组实例的fill()', function() {
 });
 
 describe('6 数组实例的entries()，keys()和values()', function() {
+  it('(1) ["a","b","c"].keys() === {}, 但是遍历和对象的时候，可以打印出对应的键名1,2,3', function() {
+    let keys = ['a','b','c'].keys(),
+        step = 0;
+    for( let index of keys){
+      expect(index).to.equal(step);
+      step += 1;
+    }
+  });
 
+  it('(3) ["a","b","c"].entries() === {}, 可对每一项进行key,value的遍历', function(){
+    let letter = ['a', 'b', 'c'];
+    let entries = letter.entries();
+    let first = entries.next().value;   // [0, 'a']
+    expect(first[0]).to.equal(0);
+    expect(first[1]).to.equal('a');
+    let second = entries.next().value;  // [1, 'b']
+    expect(second[0]).to.equal(1);
+    expect(second[1]).to.equal('b');
+    let third = entries.next().value;   // [2, 'c']
+    expect(third[0]).to.equal(2);
+    expect(third[1]).to.equal('c');
+  })
 });
 
 describe('7 数组实例的includes()', function() {
-
+  it('(1) indexOf:它内部使用严格相当运算符（===）进行判断，这会导致对NaN的误判。[NaN].indexOf(NaN) === -1', function(){
+    expect([NaN].indexOf(NaN)).to.equal(-1);
+    expect([NaN].includes(NaN)).to.equal(true);
+  });
 });
 
-describe('8 数组的空位 ', function() {
+describe('8 数组的空位:空位不是undefined,是没有任何值 ', function() {
+  it('(1) 0 in [undefined, undefined, undefined] === true', function(){
+    expect(0 in [undefined, undefined, undefined]).to.equal(true);
+  });
 
+  it('(2) 0 in [,,] === false', function(){
+    expect(0 in [,,]).to.equal(false);
+  });
+
+  it('(3) forEach(), filter(), every() 和some()都会跳过空位。', function(){
+    [,'a'].forEach((x, i) => {
+      expect(i).to.equal(1);
+    });
+  });
 });
 
