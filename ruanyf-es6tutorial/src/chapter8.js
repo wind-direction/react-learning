@@ -163,13 +163,10 @@ describe('3. 扩展运算符', function(){
 describe('6. 箭头函数', function() {
   it('(1) this指针的变化', function(){
     let foo = () => {
-      let a = () => {
+      setTimeout(() => {
         console.log('id:', this.id);
-      };
-      a();
+      }, 100);
     };
-
-    let id = 3;
 
     foo({id: 2});
   });
