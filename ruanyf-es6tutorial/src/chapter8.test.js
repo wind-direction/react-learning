@@ -3,6 +3,11 @@
  * ref: http://es6.ruanyifeng.com/#docs/function
  * Created by wind on 17/5/2.
  */
+
+let iterlib = require('iterlib');
+let map = iterlib.map;
+let takeWhile = iterlib.filter;
+let forEach = iterlib.every;
 let chai = require('chai');
 let expect = chai.expect;
 
@@ -169,6 +174,39 @@ describe('6. 箭头函数', function() {
     };
 
     foo({id: 2});
+  });
+});
+
+describe('7. 绑定this', function(){
+  it('(1) foo::bar 等同于bar.bind(foo)', function(){
+    let foo = {
+      title: 'fooFunc',
+      getTitle: function(){ return this.title; }
+    };
+    let bar = {title: 'barFunc'};
+
+    let barClone1 = foo.getTitle.bind(bar);
+    expect(barClone1()).to.equal('barFunc');
+
+    let bar2 = { title: 'bar2Func'};
+    let barClone2 = bar2::foo.getTitle;
+    expect(barClone2()).to.equal('bar2Func');
+  });
+
+  it('(2) ::双冒号运算符返回的还是原对象，因此可以采用链式写法。', function(){
+    let player = (strength) => {
+      return {
+        strength : strength,
+        character: () => ({ strength: strength, time: (new Date()).getTime() })
+      }
+    };
+    let getPlayers = function(){
+      return [ player(100), player(90), player(102), player(103) ];
+    };
+    getPlayers()
+      ::map(x=>x.character())
+      ::takeWhile( x=>x.strength > 100 )
+      ::forEach(x=>console.log(x));
   });
 });
 
