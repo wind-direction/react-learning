@@ -116,11 +116,124 @@ describe('6. 属性的可枚举性', function(){
 describe('7. 属性的遍历', function(){
   it('(1) Reflect.ownKeys返回一个数组，包含对象自身的所有属性，不管属性名是Symbol或字符串，也不管是否可枚举。', function(){
     let arr = Reflect.ownKeys({ [Symbol()]:0, b:0, 10:0, 2:0, a:0 });
-    expect(arr).to.deep.equal(['2', '10', 'b', 'a', Symbol()]);
+    console.log(arr);
   });
 });
-describe('8. __proto__属性，Object.setPrototypeOf(), Object.getPrototypeOf()', function(){});
-describe('9. Object.keys(), object.values(), object.entries()', function(){});
-describe('10. 对象的扩展运算符', function(){});
-describe('11. Object.getOwnPropertyDescriptors()', function(){});
-describe('12. Null传导运算符', function(){});
+describe('8. __proto__属性，Object.setPrototypeOf(), Object.getPrototypeOf()', function(){
+  it('(1) __proto__ 用来读取或设置当前对象的prototype对象', function(){
+    var obj = {
+      method: function(){},
+      name : 'hello'
+    };
+
+    console.log(obj.__proto__);
+  });
+
+  it('(2) setPrototypeOf()', function(){
+    let proto = {};
+    let obj = {x: 10};
+    Object.setPrototypeOf(obj, proto);
+
+    Object.assign(proto, { y: 20, z: 30 });
+    expect(obj.y).to.equal(20);
+    expect(obj.z).to.equal(30);
+  });
+
+  it('(3) getPrototypeOf()', function(){
+    function Rectangle() {}
+    let rec = new Rectangle();
+    expect(Object.getPrototypeOf(rec)).to.deep.equal(Rectangle.prototype);
+    // 变更rec的对象
+    let proto = {
+      hello : 'test'
+    };
+    Object.setPrototypeOf(rec, proto);
+    expect(Object.getPrototypeOf(rec)).to.not.deep.equal(Rectangle.prototype);
+  });
+});
+describe('9. Object.keys(), object.values(), object.entries()', function(){
+  it('(1) Object.keys(): {foo:"bar", baz: 42}=>["foo", "baz"]', function(){
+    let obj = {foo: "bar", baz: 42};
+    expect(Object.keys(obj)).to.deep.equal(["foo","baz"]);
+  });
+  it('(2) Object.values(): {foo:"bar", baz: 42}=>["bar", 42]', function(){
+    let obj = {foo: "bar", baz: 42};
+    expect(Object.values(obj)).to.deep.equal(["bar", 42]);
+  });
+  it('(3) Object.entries(): {foo:"bar", baz: 42}=>[["foo", "bar"],["baz", 42]]', function(){
+    let obj = {foo: "bar", baz: 42};
+    expect(Object.entries(obj)).to.deep.equal([["foo", "bar"],["baz", 42]]);
+  });
+});
+describe('10. 对象的扩展运算符', function(){
+  it('(1) 解构赋值 let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 }, z=>{a:3, b:4}', function(){
+    let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+    expect(x).to.equal(1);
+    expect(y).to.equal(2);
+    expect(z).to.deep.equal({a:3, b:4});
+  });
+
+  it('(2) 解构赋值的拷贝是浅拷贝.', function(){
+    let obj = {x: 1, y: 2, c: 3, d: { name: 4} },
+      {x, y, ...z} = obj;
+    expect(x).to.equal(1);
+    expect(y).to.equal(2);
+    expect(z).to.deep.equal({c:3,  d: { name: 4}});
+    obj.d.name = 5;
+    expect(z).to.deep.equal({c:3,  d: { name: 5} });
+  });
+
+  it('(3) 扩展运算符, {...a, ...b} = Object.assign({}, a, b)', function(){
+    let a = {name: 'a', age: 23}, b = {title: 'b', text: 'test b'},
+        c = {...a, ...b};
+    expect(c).to.deep.equal({name: 'a', age: 23, title: 'b', text: 'test b'});
+  });
+});
+
+describe('11. Object.getOwnPropertyDescriptors()', function(){
+  it('(1) 该方法的引入目的，主要是为了解决Object.assign()无法正确拷贝get属性和set属性的问题。', function(){
+    const source = {
+      set foo(value) {
+        console.log(value);
+      }
+    };
+
+    const target1 = {};
+    Object.assign(target1, source);
+    let target1Des = Object.getOwnPropertyDescriptor(target1, 'foo');
+    expect(target1Des).to.deep.equal({
+      value: undefined,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+
+    const target2 = {};
+    Object.defineProperties(target2, Object.getOwnPropertyDescriptors(source));
+    let target2Des = Object.getOwnPropertyDescriptor(target2, 'foo');
+    console.log(target2Des);
+  });
+
+  it('(2) Object.create', function(){
+    let a = {title: 'test'};
+    let c = {x: 42};
+    let b = Object.create(a, Object.getOwnPropertyDescriptors(c));
+    console.log(b.__proto__);
+  });
+
+  it('(3) 实现Mixin（混入）模式', function(){
+    let mix = (object) => ({
+      with: (...mixins) => mixins.reduce(
+        (c, mixin) => Object.create(
+          c, Object.getOwnPropertyDescriptors(mixin)
+        ), object)
+    });
+
+    let a = {a: 'a'};
+    let b = {b: 'b'};
+    let c = {c: 'c'};
+
+    let d = mix(c).with(a,b);
+    console.log(d.__proto__);
+  });
+});
