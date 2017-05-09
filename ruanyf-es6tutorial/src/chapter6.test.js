@@ -2,6 +2,7 @@
  * todo: 数值的扩展
  * ref: http://es6.ruanyifeng.com/#docs/number
  * Created by wind on 17/4/28.
+ * command: mocha src/chapter6.test.js
  */
 let chai = require('chai');
 let expect = chai.expect;

@@ -2,6 +2,7 @@
  * todo: 字符串的扩展
  * ref: http://es6.ruanyifeng.com/#docs/string
  * Created by wind on 17/4/26.
+ * command: mocha src/chapter4.test.js
  */
 let chai = require('chai');
 let expect = chai.expect;

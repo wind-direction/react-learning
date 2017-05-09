@@ -2,6 +2,7 @@
  * todo: Set和Map数据结构
  * ref: http://es6.ruanyifeng.com/#docs/set-map
  * Created by wind on 17/5/9.
+ * command: mocha src/chapter11.test.js --compilers js:babel-core/register -gc
  */
 import { expect } from 'chai';
 
@@ -150,5 +151,221 @@ describe('2. WeakSet', function(){
     }
   });
 });
-describe('3. Map', function(){});
-describe('1. WeakMap', function(){});
+describe('3. Map', function(){
+  it('(1) Map结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。', function(){
+    const m = new Map();
+    const o = {p : 'Hello World'};
+
+    m.set(o, 'content');
+    expect(m.get(o)).to.equal('content');
+  });
+
+  it('(2) set,get,has,delete', function(){
+    const m = new Map();
+    const o = {p : 'Hello world'};
+    m.set(o, 'content');
+    expect(m.has(o)).to.equal(true);
+    m.delete(o);
+    expect(m.has(o)).to.equal(false);
+  });
+
+  it('(3) 作为构造函数，Map 也可以接受一个数组作为参数。该数组的成员是一个个表示键值对的数组。', function(){
+    let map = new Map([
+      ['name','张三'],
+      ['title', 'Author']
+    ]);
+
+    expect(map.size).to.equal(2);
+    expect(map.has('name')).to.equal(true);
+    expect(map.get('name')).to.equal('张三');
+    expect(map.has('title')).to.equal(true);
+    expect(map.get('title')).to.equal('Author');
+  });
+
+  it('(4) Set和Map都可以用来生成新的 Map。', function(){
+    const set = new Set([
+      ['foo', 1],
+      ['bar', 2]
+    ]);
+
+    const m1 = new Map(set);
+    expect(m1.get('foo')).to.equal(1);
+
+    const m2 = new Map([['baz', 3]]);
+    const m3 = new Map(m2);
+
+    expect(m3.get('baz')).to.equal(3);
+  });
+
+  it('(5) 如果对同一个键多次赋值，后面的值将覆盖前面的值。', function(){
+    const map = new Map();
+
+    map.set('foo', 'test1').set('foo','test2');
+    expect(map.get('foo')).to.equal('test2');
+  });
+
+  it('(6) 只有对同一个对象的引用，Map 结构才将其视为同一个键。这一点要非常小心。', function(){
+    const map = new Map();
+    map.set(['a'], 555);
+    expect(map.get(['a'])).to.not.equal(555);
+  });
+
+  it('(7) Map 的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。', function(){
+    const map = new Map();
+    const k1 = ['a'];
+    const k2 = ['b'];
+
+    map.set(k1, 111).set(k2,222);
+    expect(map.get(k1)).to.equal(111);
+    expect(map.get(k2)).to.equal(222);
+  });
+
+  it('(8) clear() 方法清除所有的成员，没有返回值。', function(){
+    let map = new Map();
+    map.set('foo',true);
+    map.set('bar',false);
+    expect(map.size).to.equal(2);
+    map.clear();
+    expect(map.size).to.equal(0);
+  });
+
+  it('(9) keys(), values(), forEach(), entries()', function(){
+    let map = new Map([
+      ['F','no'],
+      ['T','yes']
+    ]);
+
+    expect([...map.keys()]).to.deep.equal(['F','T']);
+    expect([...map.values()]).to.deep.equal(['no','yes']);
+
+    let arr = [];
+    map.forEach((val, key) => arr.push(`key:${key},value:${val}`) );
+    expect(arr).to.deep.equal([ 'key:F,value:no', 'key:T,value:yes' ]);
+
+    expect([...map.entries()]).to.deep.equal([ ['F','no'], ['T','yes'] ]);
+  });
+
+  it('(10) forEach方法还可以接受第二个参数，用来绑定this。', function(){
+    const reporter = {
+      report(key, value) {
+        return `key:${key},value:${value}`;
+      }
+    };
+
+    const map = new Map([
+      ['foo', 'test1'],
+      ['baz', 'test2']
+    ]);
+
+    let arr = [];
+    map.forEach( function(val, key) {
+      let item = this.report(key, val);
+      arr.push(item);
+    }, reporter);
+
+    expect(arr).to.deep.equal([ 'key:foo,value:test1','key:baz,value:test2' ]);
+  });
+});
+describe('4. WeakMap', function(){
+  it('(1) WeakMap结构与Map结构类似，也是用于生成键值对。', function(){
+    const wm1 = new WeakMap();
+    const key = {foo: 1};
+    wm1.set(key, 2);
+    expect(wm1.get(key)).to.equal(2) ;
+
+    const k1 = [1, 2, 3];
+    const k2 = [4, 5, 6];
+    const wm2 = new WeakMap([[k1, 'foo'], [k2, 'bar']]);
+    expect(wm2.get(k2)).to.equal('bar') ;
+  });
+
+  it('(2) WeakMap只接受对象作为键名（null除外），不接受其他类型的值作为键名。', function(){
+    const map = new WeakMap();
+    try {
+      map.set(1, 2);
+    }catch (e) {
+      expect(e.name).to.equal('TypeError');
+      expect(e.message).to.equal('Invalid value used as weak map key');
+    }
+  });
+
+  it('(3) WeakMap的键名所指向的对象，不计入垃圾回收机制。注意，WeakMap 弱引用的只是键名，而不是键值。键值依然是正常引用。', function(){
+    const wm = new WeakMap();
+    let key = {};
+    let obj = {foo : 1};
+
+    wm.set(key, obj);
+
+    obj = null;
+    expect(wm.get(key)).to.deep.equal({foo: 1});
+  });
+
+  it('(4) 垃圾回收的测试', function(){
+    let turnToBin = function(val){
+      if(typeof val === 'number'){
+        let _val_ = parseInt(val);
+        if(_val_ >= 1024){
+          if(_val_ >= 1048576){                    //1024*1024
+            if(_val_>= 1073741824){              //1024*1024*1024
+              if(_val_>= 1099511627776) return parseFloat(_val_/1099511627776).toFixed(2) + "TB";
+              else  return parseFloat(_val_/1073741824).toFixed(2) + "GB";
+            }else  return parseFloat(_val_/1048576).toFixed(2) + "MB";
+          }else  return parseFloat(_val_/1024).toFixed(2) + "KB";
+        }else return _val_+"B";
+      }else {
+        return val;
+      }
+    };
+
+    let formatMem = (obj) => {
+      let spaceArr = '                    ',  // 20个空白字符
+          titleStr = spaceArr.substr(0,(20 - obj.title.length)) + obj.title,
+          rss = turnToBin(obj.rss),
+          rssStr = spaceArr.substr(0,(20 - rss.length)) + rss,
+          heapTotal = turnToBin(obj.heapTotal),
+          heapTotalStr = spaceArr.substr(0,(20 - heapTotal.length)) + heapTotal,
+          heapUsed = turnToBin(obj.heapUsed),
+          heapUsedStr = spaceArr.substr(0,(20 - heapUsed.length)) + heapUsed,
+          external = turnToBin(obj.external),
+          externalStr = spaceArr.substr(0,(20 - external.length)) + external;
+      return `|${titleStr}|${rssStr}|${heapTotalStr}|${heapUsedStr}|${externalStr}|`;
+    };
+
+
+
+    global.gc();
+    let memory = process.memoryUsage();
+    memory.title = 'begin';
+    let wm = new WeakMap();
+    let b = new Object();
+
+    global.gc();
+
+    let memory1 = process.memoryUsage();
+    memory1.title = 'create obj';
+
+    wm.set(b, new Array(5*1024*1024));
+
+    global.gc();
+
+    let memory2 = process.memoryUsage();
+    memory2.title = 'Array(5*1024*1024)';
+
+    // 解除b；
+    b = null;
+    global.gc();
+    let memory3 = process.memoryUsage();
+    memory3.title = 'b= null';
+    let header = {
+      title: 'header',
+      rss: 'rss',
+      heapTotal:'heapTotal',
+      heapUsed:'heapUsed',
+      external:'external'
+    };
+
+    [header,memory, memory1, memory2, memory3].forEach((item)=>{
+      console.log(formatMem(item));
+    });
+  });
+});

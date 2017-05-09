@@ -2,6 +2,7 @@
  * todo: Symbol
  * ref: http://es6.ruanyifeng.com/#docs/symbol
  * Created by wind on 17/5/8.
+ * command: mocha src/chapter10.test.js --compilers js:babel-core/register
  */
 import { expect } from 'chai';
 

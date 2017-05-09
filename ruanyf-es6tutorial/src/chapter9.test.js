@@ -2,6 +2,7 @@
  * todo: 对象的扩展
  * ref: http://es6.ruanyifeng.com/#docs/object
  * Created by wind on 17/5/5.
+ * command: mocha src/chapter9.test.js --compilers js:babel-core/register
  */
 import { expect } from 'chai';
 

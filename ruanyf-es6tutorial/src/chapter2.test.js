@@ -2,6 +2,7 @@
  * todo: let 和 const 命令
  * ref: http://es6.ruanyifeng.com/#docs/let
  * Created by wind on 17/4/26.
+ * command: mocha src/chapter2.test.js
  */
 
 var expect = require('chai').expect;

@@ -2,6 +2,7 @@
  * todo: 数组的扩展
  * ref: http://es6.ruanyifeng.com/#docs/array
  * Created by wind on 17/4/28.
+ * command: mocha src/chapter7.test.js
  */
 let chai = require('chai');
 let expect = chai.expect;

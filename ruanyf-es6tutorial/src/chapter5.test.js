@@ -2,6 +2,7 @@
  * todo: 正则的扩展
  * ref: http://es6.ruanyifeng.com/#docs/regex
  * Created by wind on 17/4/27.
+ * command: mocha src/chapter5.test.js
  */
 let chai = require('chai');
 let expect = chai.expect;

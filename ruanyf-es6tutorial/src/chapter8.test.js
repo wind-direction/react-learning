@@ -2,6 +2,7 @@
  * todo: 函数的扩展
  * ref: http://es6.ruanyifeng.com/#docs/function
  * Created by wind on 17/5/2.
+ * command: mocha src/chapter8.test.js
  */
 
 let iterlib = require('iterlib');

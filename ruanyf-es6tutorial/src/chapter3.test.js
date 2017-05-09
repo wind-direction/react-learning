@@ -2,6 +2,7 @@
  * todo: 变量的解构赋值
  * ref: http://es6.ruanyifeng.com/#docs/destructuring
  * Created by wind on 17/4/26.
+ * command: mocha src/chapter3.test.js
  */
 var chai = require('chai');
 var expect = chai.expect;
