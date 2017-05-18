@@ -5,6 +5,7 @@
  * command: mocha src/chapter12.test.js --compilers js:babel-core/register
  */
 import { expect } from 'chai';
+import { JSDOM } from 'jsdom';
 
 describe('1. 概述', function(){
   it('(1) 为空对象架设了一层拦截', function() {
@@ -276,6 +277,72 @@ describe('2. Proxy 实例的方法', () => {
     let lastVal = pipe(3).double.pow.reverseInt.get;
     expect(lastVal).to.equal(63);
   });
+
+  it('(5) 利用get拦截，实现一个生成各种DOM节点的通用函数dom。', () => {
+
+    const { window } = new JSDOM(`...`);
+    const { document } = window;
+
+    const dom  = new Proxy({}, {
+      get(target, property) {
+        return (attrs = {}, ...children) => {
+          const el = document.createElement(property);
+          for( let prop of Object.keys(attrs) ) {
+            el.setAttribute(prop, attrs[prop]);
+          }
+
+          for( let child of children) {
+            if( typeof child === 'string') {
+              child = document.createTextNode(child);
+            }
+            el.appendChild(child);
+          }
+
+          return el;
+        }
+      }
+    });
+
+    const el = dom.div({},
+      'Hello, my name is ',
+      dom.a({ href : '//example.com' }, 'Mark'),
+      '. I like: ',
+      dom.ul({},
+        dom.li({}, 'The Web'),
+        dom.li({}, 'Food'),
+        dom.li({}, `...actually that's it`)
+      )
+    );
+
+    console.log(el.innerHTML);
+  });
+
+  it('(6) 如果一个属性不可配置（configurable）和不可写（writable），则该属性不能被代理，通过 Proxy 对象访问该属性会报错', () => {
+    const target = Object.defineProperties({}, {
+      foo: {
+        value: 123,
+        writable: false,
+        configurable: false
+      }
+    });
+
+    const handler = {
+      get(target, propKey) {
+        console.log(`代理get方法被调用,参数是${propKey}, 原值为${target[propKey]},代理值为:abc`);
+        return 'abc';
+      }
+    };
+
+    const proxy = new Proxy(target, handler);
+
+    try {
+      proxy.foo;
+    } catch(e) {
+      expect(e.name).to.equal('TypeError');
+      console.log(e.message);
+    }
+  });
+
 });
 describe('3. Proxy.revocable()', function(){});
 describe('4. this问题', function(){});
