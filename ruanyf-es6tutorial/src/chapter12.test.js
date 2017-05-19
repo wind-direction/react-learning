@@ -6,6 +6,7 @@
  */
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
+import os from 'os';
 
 describe('1. 概述', function(){
   it('(1) 为空对象架设了一层拦截', function() {
@@ -343,8 +344,200 @@ describe('2. Proxy 实例的方法', () => {
     }
   });
 
+  it('(7) 假定Person对象有一个age属性，该属性应该是一个不大于200的整数，那么可以使用Proxy保证age的属性值符合要求。', () => {
+    let validator = {
+      set(obj, prop, value) {
+        if(prop === 'age') {
+          if(!Number.isInteger(value)) {
+            throw new TypeError('The age is not an integer');
+          }
+
+          if(value > 200) {
+            throw new RangeError('The ages seems invalid');
+          }
+        }
+        return obj[prop] = value;
+      }
+    };
+
+    // 测试
+    let person = new Proxy({}, validator);
+
+    console.log(`设置年纪为100`);
+    person.age = 100;
+
+    console.log(`设置年纪为字符串"xxxx"`);
+
+    try {
+      person.age = 'xxxx';
+    }catch(e) {
+      expect(e.name).to.equal('TypeError');
+      expect(e.message).to.equal('The age is not an integer');
+    }
+
+    console.log(`设置年纪为201`);
+
+    try {
+      person.age = 201;
+    }catch(e) {
+      expect(e.name).to.equal('RangeError');
+      expect(e.message).to.equal('The ages seems invalid');
+    }
+  });
+
+  it('(8) 利用set方法，还可以数据绑定，即每当对象发生变化时，会自动更新 DOM。', () => {
+    console.log('可以考察下redux的数据绑定。');
+  });
+
+  it('(9) 结合get和set方法，就可以做到防止这些内部属性被外部读写。', () => {
+    let invariant = (key, action) => {
+      if(key[0] === '_') {
+        throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+      }
+    };
+
+    let handler = {
+      get (target, key) {
+        invariant(key, 'get');
+        return target[key];
+      },
+      set (target, key, value) {
+        invariant(key, 'set');
+        target[key] = value;
+        return true;
+      }
+    };
+
+    let target = {};
+    let proxy = new Proxy(target, handler);
+    // 尝试读取私有属性_prop
+    try {
+      proxy._prop;
+    }catch(e){
+      expect(e.name).to.equal('Error');
+      expect(e.message).to.equal('Invalid attempt to get private "_prop" property');
+    }
+
+    // 尝试设置私有属性_prop
+    try {
+      proxy._prop = 'c';
+    }catch(e){
+      expect(e.name).to.equal('Error');
+      expect(e.message).to.equal('Invalid attempt to set private "_prop" property');
+    }
+    console.log('如果目标对象自身的某个属性，不可写也不可配置，那么set不得改变这个属性的值，只能返回同样的值，否则报错。');
+  });
+
+  it('(10) apply方法拦截函数的调用、call和apply操作。', () => {
+    let target = () => 'I am the target';
+    let handle = {
+      apply() {
+        return 'I am the proxy';
+      }
+    };
+
+    let p = new Proxy(target, handle);
+
+    expect(p()).to.equal('I am the proxy');
+  });
+
 });
-describe('3. Proxy.revocable()', function(){});
-describe('4. this问题', function(){});
-describe('5. 实例: Web服务的客户端', function(){});
+
+describe('3. Proxy.revocable()', () => {
+ it('(1) Proxy.revocable方法返回一个可取消的 Proxy 实例。', () => {
+   let target = {};
+   let handler = {};
+
+   let { proxy, revoke } = Proxy.revocable(target, handler);
+
+   // 正常访问属性
+   proxy.foo = 123;
+   console.log(`正常访问属性foo,值为: ${proxy.foo}`);
+
+   // 取消代理
+   revoke();
+
+   try {
+     console.log(proxy.foo);
+   }catch (e) {
+     console.log(`删除代理之后访问:${e.name}: ${e.message}`);
+     expect(e.name).to.equal('TypeError');
+     expect(e.message).to.equal(`Cannot perform 'get' on a proxy that has been revoked`);
+   }
+ });
+});
+
+describe('4. this问题', function(){
+  it('(1) 在 Proxy 代理的情况下，目标对象内部的this关键字会指向 Proxy 代理。', () => {
+    const target = {
+      m() {
+        return (this === proxy);
+      }
+    };
+
+    const handler = {};
+
+    const proxy = new Proxy(target, handler);
+
+    expect(target.m()).to.equal(false);
+    expect(proxy.m()).to.equal(true);
+  });
+
+  it('(2) 下面是一个例子，由于this指向的变化，导致 Proxy 无法代理目标对象。', () => {
+    const _name = new WeakMap();
+
+    class Person {
+      constructor(name) {
+        _name.set(this, name);
+      }
+
+      get name() {
+        return _name.get(this);
+      }
+    }
+
+    const jane = new Person('Jane');
+
+    console.log(`不通过代理访问原对象的属性[name],值为${jane.name}`);
+
+    const proxy = new Proxy(jane, {});
+
+    console.log(`通过代理访问原对象的属性[name],值为${proxy.name}`);
+    expect(proxy.name).to.equal(undefined);
+  });
+
+  it('(3) 有些原生对象的内部属性，只有通过正确的this才能拿到，所以 Proxy 也无法代理这些原生对象的属性。', () => {
+    const target = new Date();
+    const handler = {};
+    const proxy = new Proxy(target, handler);
+
+    try {
+      proxy.getDate();
+    }catch(e) {
+      expect(e.name).to.equal('TypeError');
+      expect(e.message).to.equal('this is not a Date object.');
+    }
+  });
+
+  it('(4)this绑定原始对象，就可以解决【原生对象的内部属性，只有通过正确的this才能拿到】的问题', () => {
+    let target = new Date('2017-05-19');
+    const handler = {
+      get(target, prop) {
+        if(prop === 'getDate'){
+          return target.getDate.bind(target);
+        }
+
+        return Reflect.get(target, prop);
+      }
+    };
+
+    const proxy = new Proxy(target, handler);
+
+    expect(proxy.getDate()).to.equal(19);
+  });
+});
+
+describe('5. 实例: Web服务的客户端', function(){
+  it('(1) Proxy 对象可以拦截目标对象的任意属性，这使得它很合适用来写 Web 服务的客户端。', () => {});
+});
 
