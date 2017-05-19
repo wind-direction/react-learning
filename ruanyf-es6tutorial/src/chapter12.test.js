@@ -6,7 +6,6 @@
  */
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
-import os from 'os';
 
 describe('1. 概述', function(){
   it('(1) 为空对象架设了一层拦截', function() {
