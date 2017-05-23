@@ -16,5 +16,9 @@
     "iterlib": "^1.4.0",
     "jsdom": "^10.1.0",
     "mocha": "^3.3.0"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }
