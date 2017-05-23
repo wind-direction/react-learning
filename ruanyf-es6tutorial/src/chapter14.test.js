@@ -8,12 +8,17 @@ import { expect } from 'chai';
 import { startServer } from '../components/server';
 import { XMLHttpRequest } from 'xmlhttprequest';
 
+const HOST = '127.0.0.1';
+const PORT = 62351;
+const API_GROUP = 'api';
+const BASE_URL = `http://${HOST}:${PORT}`;
+
 describe('1.基本用法', () => {
 
   let stopServer = null;
 
   before(done => {
-    startServer(62351, function (stop) {
+    startServer(PORT, function (stop) {
       stopServer = stop;
       done();
     });
@@ -74,14 +79,35 @@ describe('1.基本用法', () => {
       return promise;
     }
 
-    getJSON('http://127.0.0.1:62351/api/book.json').then( json => {
-      console.log('Contents: ' + json);
+    // 异步获取数据
+    getJSON(`${BASE_URL}/${API_GROUP}/book.json`).then( responseText => {
+      let info = JSON.parse(responseText);
+      console.log(`《${info.title}》作者:${info.author.join(' ')}, 单价:${info.price}`);
+      expect(info.id).to.equal('1220562');
     }, error => {
       console.error('出错了!',error);
     });
   });
+
+  it('(4) resolve函数的参数除了正常的值以外，还可能是另一个Promise实例', () => {
+    let p1 = new Promise((resolve, reject) => {
+      setTimeout( () => reject( new Error('fail')), 3000 );
+    });
+
+    let p2 = new Promise((resolve, reject) => {
+      setTimeout(() => resolve(p1), 1000);
+    });
+
+    p2.then(result => console.log(result))
+      .catch(error => {
+        expect(error.message).to.equal('fail');
+      });
+  });
+
 });
-describe('2.Promise.prototype.then()', () => { });
+describe('2.Promise.prototype.then()', () => {
+
+});
 describe('3.Promise.prototype.catch()', () => { });
 describe('4.Promise.all()', () => { });
 describe('5.Promise.race()', () => { });
