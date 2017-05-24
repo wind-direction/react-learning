@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   }
