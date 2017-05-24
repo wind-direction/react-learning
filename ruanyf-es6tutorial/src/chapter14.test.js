@@ -409,9 +409,48 @@ describe('9.应用', () => {
 });
 
 describe('10.Promise.try()', () => {
-  it('(1) 用async函数来解决同步函数被promise 包装成异步函数的问题', () => {
-
+  it('(1) 使用promise来处理同步函数，进行then式的操作', () => {
+    console.log('=== (1) begin ====');
+    const f = () => console.log('now');
+    Promise.resolve().then(f);
+    console.log('next');
+    console.log('=== (1) end ====');
   });
+  it('(2) 用async函数来解决同步函数被promise 包装成异步函数的问题', () => {
+    console.log('=== (2) begin ====');
+    const f = () => console.log('now');
+    (async () => f())();
+    console.log('next');
+    console.log('=== (2) end ====');
+  });
+
+  it('(3) async () => f()会吃掉f()抛出的错误。所以，如果想捕获错误，要使用promise.catch方法。', () => {
+    console.log('=== (3) begin ====');
+    const f = () => {
+      console.log('now');
+      throw new Error('throw Err');
+    };
+
+    (async () => f())()
+      .then()
+      .catch(err => console.log(`${err.name}: ${err.message}`));
+    console.log('next');
+    console.log('=== (3) end ====');
+  });
+
+  it('(4) 使用new Promise()。', () => {
+    console.log('=== (4) begin ====');
+    const f = () => console.log('now');
+    (
+      () => new Promise(
+        resolve => resolve(f())
+      )
+    )();
+      console.log('next');
+    console.log('=== (4) end ====');
+  });
+
+  it('(5) 使用Promise.try 进行错误的捕获', () => {});
 });
 
 
