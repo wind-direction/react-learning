@@ -18,6 +18,8 @@
     "mocha": "^3.3.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "node-fetch": "^1.7.0",
     "request": "^2.81.0",
     "xmlhttprequest": "^1.8.0"
   }
