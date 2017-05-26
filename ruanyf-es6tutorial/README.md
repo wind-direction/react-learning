@@ -47,4 +47,9 @@
 
 - 如果在 Generator 函数内部，调用另一个 Generator 函数，默认情况下是没有效果的。
 
+### Generator 函数的this
+
+- Generator函数g在this对象上面添加了一个属性a，但是obj对象拿不到这个属性。这是因为g返回的总是遍历器对象
+- Generator函数也不能跟new命令一起用，会报错。
+
 

@@ -626,9 +626,105 @@ describe('6. yield* 表达式', () => {
   });
 });
 
-describe('7. 作为对象属性的Generator函数', () => {});
+describe('7. 作为对象属性的Generator函数', () => {
+  it('(1) 如果一个对象的属性是 Generator 函数，可以简写成下面的形式。', () =>{
+    let obj = {
+      * myGeneratorFunc() {
+        yield 1;
+        yield 2;
+        yield 3;
+      }
+    };
 
-describe('8. Generator 函数的this', () => {});
+    expect([...obj.myGeneratorFunc()]).to.deep.equal([1,2,3]);
+  });
+});
+
+describe('8. Generator 函数的this', () => {
+  it('(1) Generator 函数总是返回一个遍历器，ES6 规定这个遍历器是 Generator 函数的实例，也继承了 Generator 函数的prototype对象上的方法。', () => {
+    function * g() {}
+
+    g.prototype.hello = () => 'hi';
+
+    let obj = g();
+
+    expect(obj instanceof g).to.equal(true);
+    expect(obj.hello()).to.equal('hi');
+  });
+
+  it('(2) Generator函数g在this对象上面添加了一个属性a，但是obj对象拿不到这个属性。', ()=> {
+    function* g() {
+      this.a = 11;
+    }
+
+    let obj = g();
+    expect(obj.a).to.equal(undefined);
+  });
+
+  it('(3) Generator函数也不能跟new命令一起用，会报错。', () => {
+    function* F() {
+      yield this.x = 2;
+      yield this.y = 3;
+    }
+
+    try {
+      new F();
+    }catch (e) {
+      expect(e.name).to.equal('TypeError');
+    }
+  });
+
+  it('(4) 生成一个空对象，使用call方法绑定 Generator 函数内部的this。这样就可以像普通函数那样进行this的操作', ()=> {
+    function* F() {
+      this.a = 1;
+      yield this.b = 2;
+      yield this.c = 3;
+    }
+
+    let obj = {};
+    let f = F.call(obj);
+    expect([...f]).to.deep.equal([2,3]);
+    expect(obj.a).to.equal(1);
+    expect(obj.b).to.equal(2);
+    expect(obj.c).to.equal(3);
+  });
+
+  it('(5) 执行的是遍历器对象f，但是生成的对象实例是obj，有没有办法将这两个对象统一呢？一个办法就是将obj换成F.prototype。', () => {
+    function* F() {
+      this.a = 1;
+      yield this.b = 2;
+      yield this.c = 3;
+    }
+    let f = F.call(F.prototype);
+
+    expect(f.next()).to.deep.equal({value: 2, done: false});  // Object {value: 2, done: false}
+    expect(f.next()).to.deep.equal({value: 3, done: false});  // Object {value: 3, done: false}
+    expect(f.next()).to.deep.equal({value: undefined, done: true});  // Object {value: undefined, done: true}
+
+    expect(f.a).to.equal(1);
+    expect(f.b).to.equal(2);
+    expect(f.c).to.equal(3);
+  });
+
+  it('(6) 再将F改成构造函数，就可以对它执行new命令了。', () => {
+    function* gen() {
+      this.a = 1;
+      yield this.b = 2;
+      yield this.c = 3;
+    }
+
+    function F() {
+      return gen.call(gen.prototype);
+    }
+
+    let f = new F();
+
+    expect([...f]).to.deep.equal([2,3]);
+    expect(f.a).to.equal(1);
+    expect(f.b).to.equal(2);
+    expect(f.c).to.equal(3);
+  });
+});
 
 describe('9. 含义', () => {});
 
