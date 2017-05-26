@@ -408,7 +408,222 @@ describe('5. Generator.prototype.return()', () => {
 });
 
 describe('6. yield* 表达式', () => {
-  
+  it('(1) 如果在 Generator 函数内部，调用另一个 Generator 函数，默认情况下是没有效果的。', () => {
+    function* foo() {
+      yield 'a';
+      yield 'b';
+    }
+
+    function* bar() {
+      yield 'x';
+      foo();
+      yield 'y';
+    }
+
+    let b = new bar();
+    expect(b.next()).to.deep.equal({value: 'x', done: false});
+    expect(b.next()).to.deep.equal({value: 'y', done: false});
+    expect(b.next()).to.deep.equal({value: undefined, done: true});
+  });
+
+  it('(2) yield*表达式，用来在一个 Generator 函数里面执行另一个 Generator 函数。', () => {
+    function* bar() {
+      yield 'x';
+      yield* foo();
+      yield 'y';
+    }
+
+    function* foo() {
+      yield 'a';
+      yield 'b';
+    }
+
+
+
+    let b = new bar();
+    expect(b.next()).to.deep.equal({value: 'x', done: false});
+    expect(b.next()).to.deep.equal({value: 'a', done: false});
+    expect(b.next()).to.deep.equal({value: 'b', done: false});
+    expect(b.next()).to.deep.equal({value: 'y', done: false});
+    expect(b.next()).to.deep.equal({value: undefined, done: true});
+  });
+
+  it('(3) outer1返回一个遍历器对象，outer2返回该遍历器对象的内部值。',() => {
+    function* inner() {
+      yield 'hello!';
+    }
+
+    function* outer1() {
+      yield 'open';
+      yield inner();
+      yield 'close';
+    }
+
+    let gen = outer1();
+    expect(gen.next().value).to.equal('open'); // "open"
+    expect(gen.next().value instanceof inner).to.equal(true);     // 返回一个遍历器对象
+    expect(gen.next().value).to.equal('close');// "close"
+
+    function* outer2() {
+      yield 'open';
+      yield* inner();
+      yield 'close';
+    }
+
+    let gen1 = outer2();
+    expect(gen1.next().value).to.equal("open");   // "open"
+    expect(gen1.next().value).to.equal("hello!"); // "hello!"
+    expect(gen1.next().value).to.equal("close");  // "close"
+  });
+
+  it('(4) yield*后面的 Generator 函数（没有return语句时），等同于在 Generator 函数内部，部署一个for...of循环。', () =>{
+    function * concat(iter1, iter2) {
+      yield* iter1;
+      yield* iter2;
+    }
+
+    function * concat1(iter1, iter2) {
+      for(let value of iter1) {
+        yield value;
+      }
+
+      for(let value of iter2) {
+        yield value;
+      }
+    }
+
+    function* gen1() {
+      yield 1;
+      yield 2;
+    }
+
+    function* gen2() {
+      yield 1;
+      yield 2;
+    }
+
+    let g1 = concat(gen1(), gen2());
+    let g2 = concat1(gen1(), gen2());
+    let res = [], res2 = [];
+
+    for(let val of g1) {
+      res.push(val);
+    }
+
+    for(let val of g2) {
+      res2.push(val);
+    }
+
+    expect(res).to.deep.equal(res2);
+  });
+
+  it('(5) 如果yield*后面跟着一个数组，由于数组原生支持遍历器，因此就会遍历数组成员。', () =>{
+    function * gen() {
+      yield* ["a","b","c"];
+    }
+
+    let g = gen();
+    expect(g.next().value).to.equal('a');
+    expect(g.next().value).to.equal('b');
+    expect(g.next().value).to.equal('c');
+    expect(g.next().value).to.equal(undefined);
+  });
+
+  it('(6) 实际上，任何数据结构只要有 Iterator 接口，就可以被yield*遍历。', () => {
+    let read = (function* () {
+      yield 'hello';
+      yield* 'hello';
+    })();
+
+    expect(read.next().value).to.equal('hello'); // "hello"
+    expect(read.next().value).to.equal('h'); // "h"
+  });
+
+  it('(7) 如果被代理的 Generator 函数有return语句，那么就可以向代理它的 Generator 函数返回数据。', () => {
+    function *foo() {
+      yield 2;
+      yield 3;
+      return "foo";
+    }
+
+    function *bar() {
+      yield 1;
+      let v = yield *foo();
+      console.log( "v: " + v );
+      yield 4;
+    }
+
+    var it = bar();
+
+    expect(it.next().value).equal(1); // {value: 1, done: false}
+    expect(it.next().value).equal(2); // {value: 2, done: false}
+    expect(it.next().value).equal(3); // {value: 3, done: false}
+    expect(it.next().value).equal(4); // {value: 4, done: false}
+    expect(it.next().value).equal(undefined); // {value: undefined, done: true}
+  });
+
+  it('(8) 另外一个例子', () => {
+    function* genFuncWithReturn() {
+      yield 'a';
+      yield 'b';
+      return 'The result';
+    }
+
+    function* logReturned(genObj) {
+      let result = yield* genObj;
+      console.log(result);
+    }
+
+    expect([...logReturned(genFuncWithReturn())]).to.deep.equal(['a','b']);
+  });
+
+  it('(9) yield*命令可以很方便地取出嵌套数组的所有成员。', () =>{
+    function* iterTree(tree) {
+      if(Array.isArray(tree)) {
+        for(let i = 0; i< tree.length; i++ ){
+          yield* iterTree(tree[i]);
+        }
+      } else {
+        yield tree;
+      }
+    }
+
+    const tree = ['a',['b','c'], ['d','e']];
+    expect([...iterTree(tree)]).to.deep.equal(['a','b','c','d','e']);
+  });
+
+  it('(10) 使用yield* 遍历完全二叉树', () => {
+    function Tree(left, label, right) {
+      this.left = left;
+      this.lable = label;
+      this.right = right;
+    }
+
+    function* inorder(t) {
+      if(t) {
+        yield* inorder(t.left);
+        yield t.lable;
+        yield* inorder(t.right)
+      }
+    }
+
+    // 生成二叉树
+    function make(array) {
+      //判断是否是叶子节点
+      if(array.length === 1) return new Tree(null, array[0], null);
+      return new Tree(make(array[0]), array[1], make(array[2]));
+    }
+
+    let tree = make([ [ ['a'], 'b', ['c'] ], 'd', [ ['e'], 'f', ['g'] ] ]);
+
+    //遍历二叉树
+    let result = [];
+    for(let node of inorder(tree)) {
+      result.push(node);
+    }
+
+    expect(result).to.deep.equal(['a','b','c','d','e','f','g']);
+  });
 });
 
 describe('7. 作为对象属性的Generator函数', () => {});

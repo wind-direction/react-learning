@@ -41,6 +41,10 @@
 ### Generator.prototype.throw()
 
 - 遍历器对象的throw方法抛出的异常可以在Generator内部捕获，而用throw命令抛出的异常只能被函数体外的catch语句捕获。
-- 如果 Generator 函数内部和外部，都没有部署try...catch代码块，那么程序将报错，直接中断执行。并且process.on('uncaughtException')捕获
+- 如果 Generator 函数内部和外部，都没有部署try...catch代码块，那么程序将报错，直接中断执行。并且不能被process.on('uncaughtException')捕获。
+
+### yield* 表达式
+
+- 如果在 Generator 函数内部，调用另一个 Generator 函数，默认情况下是没有效果的。
 
 
