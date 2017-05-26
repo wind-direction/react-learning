@@ -52,4 +52,10 @@
 - Generator函数g在this对象上面添加了一个属性a，但是obj对象拿不到这个属性。这是因为g返回的总是遍历器对象
 - Generator函数也不能跟new命令一起用，会报错。
 
+### 含义
+
+- [协程的定义](http://es6.ruanyifeng.com/#docs/generator#Generator与协程)
+- Generator 函数是 ES6 对协程的实现，但属于不完全实现。
+- Generator 函数被称为“半协程”（semi-coroutine），意思是只有 Generator 函数的调用者，才能将程序的执行权还给 Generator 函数。
+
 

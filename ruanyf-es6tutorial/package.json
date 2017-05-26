@@ -21,6 +21,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "node-fetch": "^1.7.0",
     "request": "^2.81.0",
+    "shelljs": "^0.7.7",
     "xmlhttprequest": "^1.8.0"
   }
 }

@@ -6,6 +6,8 @@
  */
 
 import { expect } from 'chai';
+import path from 'path';
+import FileReader from '../components/FileReader';
 
 describe('1. 简介', () => {
   it('(1) Generator（发生器）是一个状态机，封装了多个内部状态。', () => {
@@ -726,6 +728,43 @@ describe('8. Generator 函数的this', () => {
   });
 });
 
-describe('9. 含义', () => {});
+describe('9. 含义', () => {
+  it('(1) Generator 与状态机', () => {
+    let clock = function* () {
+      while(true) {
+        console.log('Tick!');
+        yield;
+        console.log('Tock!');
+        yield;
+      }
+    };
 
-describe('10.应用', () => {});
+    let obj = clock();
+    obj.next();
+    obj.next();
+  });
+
+  it('(2) Generator与协程', () => {
+    console.log('由于 JavaScript 是单线程语言，只能保持一个调用栈。引入协程以后，每个任务可以保持自己的调用栈。这样做的最大好处，就是抛出错误的时候，可以找到原始的调用栈。');
+  });
+});
+
+describe('10.应用', () => {
+  it('(1) 异步操作的同步化表达，通过 Generator 函数逐行读取文本文件。', () => {
+    function* numbers() {
+      let file = new FileReader(path.resolve(__dirname, '../api/numbers.txt'));
+      try {
+        while(!file.eof){
+          let val = file.readLine();
+          yield parseInt(val,10);
+        }
+      } finally {
+        file.close();
+      }
+    }
+
+    let obj = numbers();
+    console.log(obj.next());
+  });
+});
+
