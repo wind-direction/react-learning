@@ -38,4 +38,9 @@
 - yield表达式本身没有返回值，或者说总是返回undefined。
 - 由于next方法的参数表示上一个yield表达式的返回值，所以第一次使用next方法时，不能带有参数。
 
+### Generator.prototype.throw()
+
+- 遍历器对象的throw方法抛出的异常可以在Generator内部捕获，而用throw命令抛出的异常只能被函数体外的catch语句捕获。
+- 如果 Generator 函数内部和外部，都没有部署try...catch代码块，那么程序将报错，直接中断执行。并且process.on('uncaughtException')捕获
+
 

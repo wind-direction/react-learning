@@ -1,7 +1,7 @@
 /**
  * todo: Generator 函数的语法
  * ref: http://es6.ruanyifeng.com/#docs/generator
- * command: mocha src/chapter15.test.js --compilers js:babel-core/register
+ * command: mocha src/chapter16.test.js --compilers js:babel-core/register
  * Created by wind on 17/5/25.
  */
 
@@ -204,11 +204,212 @@ describe('3. for...of 循环', () => {
   });
 });
 
-describe('4. Generator.prototype.throw()', () => {});
+describe('4. Generator.prototype.throw()', () => {
+  it('(1) Generator 函数返回的遍历器对象，都有一个throw方法，可以在函数体外抛出错误，然后在 Generator 函数体内捕获', () => {
+    let g = function* (){
+      try{
+        yield;
+      }catch (e) {
+        console.log('内部捕获', e);
+      }
+    };
 
-describe('5. Generator.prototype.return()', () => {});
+    let i = g();
+    i.next();
 
-describe('6. yield* 表达式', () => {});
+    try {
+      i.throw('a');
+      i.throw('b');
+    }catch(e) {
+      console.log('外部捕获',e);
+    }
+  });
+
+  it('(2) 遍历器对象的throw方法抛出的异常可以在Generator内部捕获，而用throw命令抛出的异常只能被函数体外的catch语句捕获。', () => {
+    let g = function* () {
+      while(true) {
+        try {
+          yield ;
+        } catch(e) {
+          if(e != 'a') throw e;
+          console.log('内部捕获!', e);
+        }
+      }
+    };
+
+    let i = g();
+    i.next();
+
+    try {
+      throw new Error('a');
+      throw new Error('b');
+    } catch(e) {
+      console.log('外部捕获', `${e.name}: ${e.message}`);
+    }
+  });
+
+  it('(3) 如果 Generator 函数内部没有部署try...catch代码块，那么throw方法抛出的错误，将被外部try...catch代码块捕获。', () => {
+    let g = function* () {
+      while(true) {
+        yield;
+        console.log(`内部捕获 ${e}`);
+      }
+    };
+
+    let i = g();
+    i.next();
+
+    try {
+      i.throw('a');
+      i.throw('b');
+    } catch(e) {
+      console.log(`外部捕获 ${e}`);
+    }
+  });
+
+  it('(4) 如果 Generator 函数内部和外部，都没有部署try...catch代码块，那么程序将报错，直接中断执行。', () => {
+
+    let gen = function * () {
+      yield console.log('hello');
+      yield console.log('world');
+    };
+
+    let g = gen();
+    g.next();
+    // g.throw(new Error('text')); 报错并直接退出，process不能捕获
+
+  });
+
+  it('(5) throw方法被捕获以后，会附带执行下一条yield表达式。也就是说，会附带执行一次next方法。', () => {
+    let gen = function* (){
+      try{
+        yield console.log('a');
+      } catch (e) {
+        console.log(`内部捕获~`,e);
+      }
+      yield console.log('b');
+      yield console.log('c');
+    };
+
+    let g = gen();
+    g.next();
+    g.throw('error');
+    g.next();
+  });
+
+  it('(6) throw命令与g.throw方法是无关的，两者互不影响。', () => {
+    let gen = function* () {
+      yield console.log('hello');
+      yield console.log('word');
+    };
+
+    let g = gen();
+    g.next();
+
+    try {
+      throw new Error('error');
+    } catch (e) {
+      g.next();
+    }
+  });
+
+  it('(7) Generator 函数体外抛出的错误，可以在函数体内捕获；反过来，Generator 函数体内抛出的错误，也可以被函数体外的catch捕获。', () => {
+    function * foo() {
+      let x= yield 3;
+      let y = x.toUpperCase();
+      yield y;
+    }
+
+    let it = foo();
+    it.next();
+    try {
+      it.next(42);
+    } catch (e){
+      console.log(`${e.name}: ${e.message}`);
+    }
+  });
+
+  it('(8) 一旦 Generator 执行过程中抛出错误，且没有被内部捕获，就不会再执行下去了。如果此后还调用next方法，会到达遍历器的终点。', () => {
+    function * g() {
+      yield 1;
+      console.log('throwing an exception');
+      throw new Error('generator broke!');
+      yield 2;
+      yield 3;
+    }
+
+    function log(generator) {
+      let v;
+      console.log('starting generator');
+      try {
+        v = generator.next();
+        console.log('第一次运行next方法',v);
+      } catch(err) {
+        console.log('捕获异常',v);
+      }
+
+      try {
+        v = generator.next();
+        console.log('第二次运行next方法',v);
+      } catch(err) {
+        console.log('捕获异常',v);
+      }
+
+      try {
+        v = generator.next();
+        console.log('第三次运行next方法', v);
+      } catch (err) {
+        console.log('捕捉错误', v);
+      }
+      console.log('caller done');
+    }
+
+    log(g());
+  });
+});
+
+describe('5. Generator.prototype.return()', () => {
+  it('(1) return方法，可以返回给定的值，并且终结遍历Generator函数。', () => {
+    function* gen() {
+      yield 1;
+      yield 2;
+      yield 3;
+    }
+
+    let g = gen();
+
+    expect(g.next()).to.deep.equal({value: 1, done: false});
+    expect(g.return('foo')).to.deep.equal({value: "foo", done: true});
+    expect(g.next()).to.deep.equal({value: undefined, done: true});
+  });
+
+  it('(2) 如果 Generator 函数内部有try...finally代码块，那么return方法会推迟到finally代码块执行完再执行。', () => {
+    function * numbers() {
+      yield 1;
+      try {
+        yield 2;
+        yield 3;
+      } finally {
+        yield 4;
+        yield 5;
+      }
+
+      yield 6;
+    }
+
+    let g = numbers();
+
+    expect(g.next()).to.deep.equal({value: 1, done: false});
+    expect(g.next()).to.deep.equal({value: 2, done: false});
+    expect(g.return(7)).to.deep.equal({value: 4, done: false});
+    expect(g.next()).to.deep.equal({value: 5, done: false});
+    expect(g.next()).to.deep.equal({value: 7, done: true});
+  });
+});
+
+describe('6. yield* 表达式', () => {
+  
+});
 
 describe('7. 作为对象属性的Generator函数', () => {});
 
