@@ -8,36 +8,60 @@
  */
 
 import React from 'react';
-import Year from '../Year';
+import YearClass from '../YearClass';
+import { BASE_DAY } from '../Conf';
 
 class Table extends React.Component {
   constructor() {
     super();
-    const begin = {
-      time: new Date('2017/01/28'),
-      year: '丁酉',
-      month: '辛丑',
-      day: '乙卯',
-      animal: '鸡',
-      desc: '正月初一',
-    };
     this.getAllYear = this.getAllYear.bind(this);
-    this.state = { begin, history: [] };
+    this.getHtml = this.getHtml.bind(this);
+    this.history = [];
+    this.state = { begin: BASE_DAY };
   }
 
   getAllYear() {
-    const { begin, history } = this.state;
+    const begin = this.state.begin;
+    const history = [];
     const year = begin.time.getFullYear();
-    for(let item = year; item >= 2000; item--) {
-      let yearInstance = new Year(new Date(`${item}/01/01 00:00:00`));
+    for (let item = year; item >= 2005; item -= 1) {
+      const args = {
+        year: item,
+        begin: new Date(`${item}/01/01 00:00:00`),
+        end: new Date(Date.parse(`${item + 1}/01/01 00:00:00`) - 1000),
+      };
+      const yearInstance = new YearClass(args);
       history.push(yearInstance.getData());
     }
+    this.history = history;
 
-    this.setState({ history });
+    const html = this.getHtml();
+
+    this.setState({ html });
+  }
+
+  getHtml() {
+    const res = [];
+    this.history.forEach(
+      year => year.forEach(
+        month => month.forEach(
+          week => week.forEach(
+            item => res.push(
+              (<tr>
+                <td>{item.year}</td>
+                <td>{item.month}</td>
+                <td>{item.day.toString()}</td>
+              </tr>),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return res;
   }
 
   render() {
-    const { history } = this.state;
     return (
       <div className="row">
         <div className="col-lg-12">
@@ -53,21 +77,13 @@ class Table extends React.Component {
                 <table className="table table-bordered table-striped table-hover table-sm">
                   <thead>
                     <tr>
-                      <th>公元</th>
-                      <th>天干地支</th>
-                      <th>生肖</th>
+                      <th>年</th>
+                      <th>月</th>
+                      <th>日</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {history.map(
-                      item => (
-                        <tr>
-                          <td>{item.year}</td>
-                          <td>{item.lan}</td>
-                          <td>{item.animal}</td>
-                        </tr>
-                      ),
-                    )}
+                    {this.state.html}
                   </tbody>
                 </table>
               </div>
