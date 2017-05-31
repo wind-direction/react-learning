@@ -16,6 +16,7 @@ class FileReader {
     // 文件行数
     let child = shell.exec(`wc -l ${this.__path__}`, {silent:true});
     let res = child.stdout.split(' ').unshift();
+    return res;
   }
 
   readLine() {
