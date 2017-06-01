@@ -105,6 +105,21 @@ author: TJ Holowaychuk
     2. end事件：整个“数据流”处理“完了。
     3. error事件：发生错误。
 
+### 18章：async 函数
+
+#### 用法
+
+async函数对 Generator 函数的改进，体现在以下四点。
+
+1. 内置执行器
+2. 更好的语义
+3. 更广的适用性
+4. 返回值是Promise
+
+#### 语法
+
+async 函数返回一个Promise对象。
+async 函数内部return语句返回的值，会成为then方法回调函数的参数。
 
 
 
