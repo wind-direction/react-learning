@@ -121,6 +121,12 @@ async函数对 Generator 函数的改进，体现在以下四点。
 async 函数返回一个Promise对象。
 async 函数内部return语句返回的值，会成为then方法回调函数的参数。
 
+##### await
+
+1. 前面已经说过，await命令后面的Promise对象，运行结果可能是rejected，所以最好把await命令放在try...catch代码块中。
+2. 多个await命令后面的异步操作，如果不存在继发关系，最好让它们同时触发。
+3. await命令只能用在async函数之中，如果用在普通函数，就会报错。
+
 
 
 
