@@ -6,19 +6,17 @@ import { ADD_TODO,TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from '
 const { SHOW_ALL } = VisibilityFilters;
 
 function todos(state = [], action) {
-  let todosRes;
   switch (action.type) {
     case ADD_TODO:
-      todosRes = [
+      return [
         ...state,
         {
           text: action.text,
           complete: false,
         }
       ];
-      break;
     case TOGGLE_TODO:
-      todosRes = state.map((todo, index) => {
+      return state.map((todo, index) => {
         if(index === action.index) {
           return Object.assign({}, todo, {
             completed: !todo.completed
@@ -26,9 +24,7 @@ function todos(state = [], action) {
         }
         return todo;
       });
-      break;
-    default: todosRes = state; break;
-    return todosRes;
+    default: return state;
   }
 }
 

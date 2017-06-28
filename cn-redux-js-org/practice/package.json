@@ -4,7 +4,8 @@
   "description": "",
   "main": "action.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --hot"
   },
   "author": "",
   "license": "ISC",
@@ -14,12 +15,12 @@
     "redux": "^3.7.1"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
+    "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "html-webpack-plugin": "^2.29.0",
-    "webpack": "^3.0.0",
+    "webpack": "^2.6.1",
     "webpack-dev-server": "^2.5.0"
   }
 }
