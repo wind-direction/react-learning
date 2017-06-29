@@ -25,7 +25,7 @@ module.exports= {
     inline: true
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.scss']
   },
   module: {
     loaders: [
@@ -33,8 +33,23 @@ module.exports= {
         test: /\.jsx?$/,
         loaders: ['babel-loader'],
         include: APP_PATH
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+          { loader: "sass-loader" }
+        ],
+        include: APP_PATH
+      },
+      {
+        test: /\.png(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          { loader : 'url-loader', options : { limit : 10000, mimetype : 'image/png' } }
+        ]
       }
-    ]
+    ],
   },
   plugins: [
     new HtmlwebpackPlugin({
