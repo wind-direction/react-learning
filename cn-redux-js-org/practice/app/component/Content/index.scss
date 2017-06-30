@@ -1,0 +1,46 @@
+$baseFontColor: #ffffff !default;
+$baseBorderColor: #ccc !default;
+$basePadding: 5px !default;
+$asideWidth: 200px !default;
+$asideBackgroundColor: lightsteelblue !default;
+$contentBackgroundColor: #000000 !default;
+$contentPaddingBottom: 2em !default;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app,.wrapper{
+  min-height: 100%;
+  height: 100%;
+}
+
+.wrapper {
+  display: inline-block;
+  border-left: $asideWidth solid $asideBackgroundColor;
+  position: relative;
+  vertical-align: bottom;
+  width: calc(100% - #{$asideWidth});
+}
+
+.aside {
+  float: left;
+  width: $asideWidth;
+  margin-left: -$asideWidth;
+  margin-right: -1px;
+  border-right: 1px solid $baseBorderColor;
+  position: relative;
+}
+
+.content {
+  background-color: $contentBackgroundColor;
+  border-left: 1px solid $baseBorderColor;
+  color: $baseFontColor;
+  padding: $basePadding;
+  height: calc(100% - #{$contentPaddingBottom} - #{$basePadding});
+}
+
+.aside, .content {
+  padding-bottom: $contentPaddingBottom;
+}

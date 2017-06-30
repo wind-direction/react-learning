@@ -2,7 +2,7 @@
  * Created by wind on 2017/6/28.
  */
 import { combineReducers } from 'redux';
-import { ADD_TODO,TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './action';
+import { ADD_TODO,TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from '../action/action';
 const { SHOW_ALL } = VisibilityFilters;
 
 function todos(state = [], action) {
