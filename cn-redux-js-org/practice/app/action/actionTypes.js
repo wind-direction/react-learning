@@ -4,6 +4,7 @@
 export const ADD_TODO = 'ADD_TODO';         // 添加任务
 export const TOGGLE_TODO = 'TOGGLE_TODO';   // 用户完成任务
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'; // 过滤器
+export const GET_ALL_INFO = 'GET_ALL_INFO';
 
 // 其他的常量
 export const VisibilityFilters = {

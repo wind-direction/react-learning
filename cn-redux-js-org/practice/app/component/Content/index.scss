@@ -3,12 +3,15 @@ $baseBorderColor: #ccc !default;
 $basePadding: 5px !default;
 $asideWidth: 200px !default;
 $asideBackgroundColor: lightsteelblue !default;
-$contentBackgroundColor: #000000 !default;
+$contentBackgroundColor: #ffffff !default;
 $contentPaddingBottom: 2em !default;
+$fontSize: 14px !default;
+$baseLineHeight: 1.42857143 !default;
 
 * {
   margin: 0;
   padding: 0;
+  font-size: $fontSize;
 }
 
 html, body, #app,.wrapper{
@@ -37,8 +40,44 @@ html, body, #app,.wrapper{
   background-color: $contentBackgroundColor;
   border-left: 1px solid $baseBorderColor;
   color: $baseFontColor;
-  padding: $basePadding;
   height: calc(100% - #{$contentPaddingBottom} - #{$basePadding});
+}
+
+.content pre {
+  background-color: #000000;
+  padding: $basePadding;
+}
+
+.content .todoList {
+  padding: $basePadding;
+  color: #000000;
+}
+
+.content .todoList input {
+  display: block;
+  width: calc(100% - 26px);
+  height: 34px;
+  padding: $basePadding;
+  line-height: $baseLineHeight;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.content .todoList button {
+  display: inline-block;
+  padding: $basePadding;
+  margin-bottom: 0;
+  font-weight: 400;
+  line-height: $baseLineHeight;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
 }
 
 .aside, .content {

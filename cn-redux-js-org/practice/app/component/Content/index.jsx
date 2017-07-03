@@ -1,12 +1,16 @@
 import React from 'react';
-import store from '../../store/store';
+import { connect } from 'react-redux';
+import { getAllInfo } from '../../action/action';
+import Footer from '../Footer';
+import AddTodo from '../containers/AddTodo';
+import VisibleTodoList from '../containers/VisibleTodoList';
 import './index.scss'
 
 class Content extends React.Component {
-  constructor() {
+  constructor({ dispatch }) {
     super();
     this.state = {
-      info: store.getState()
+      info: dispatch(getAllInfo())
     };
   }
 
@@ -16,13 +20,18 @@ class Content extends React.Component {
       <div className="wrapper">
         <div className="aside">-</div>
         <div className="content">
-              <pre>
-                {strInfo}
-              </pre>
+            <pre>
+              {strInfo}
+            </pre>
+            <div className="todoList">
+              <AddTodo />
+              <VisibleTodoList />
+              <Footer />
+            </div>
         </div>
       </div>
     );
   }
 }
 
-export default Content;
+export default connect()(Content);

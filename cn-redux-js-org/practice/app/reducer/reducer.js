@@ -2,7 +2,7 @@
  * Created by wind on 2017/6/28.
  */
 import { combineReducers } from 'redux';
-import { ADD_TODO,TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from '../action/action';
+import { ADD_TODO,TOGGLE_TODO, SET_VISIBILITY_FILTER, GET_ALL_INFO, VisibilityFilters } from '../action/action';
 const { SHOW_ALL } = VisibilityFilters;
 
 function todos(state = [], action) {
@@ -11,8 +11,9 @@ function todos(state = [], action) {
       return [
         ...state,
         {
+          id: (new Date()).getTime(),
           text: action.text,
-          complete: false,
+          completed: false,
         }
       ];
     case TOGGLE_TODO:
@@ -24,6 +25,7 @@ function todos(state = [], action) {
         }
         return todo;
       });
+    case GET_ALL_INFO:
     default: return state;
   }
 }
@@ -36,7 +38,16 @@ function visibilityFilter(state = SHOW_ALL, action) {
       return state;
   }
 }
+
+function getAllInfo(state = {}, action ){
+  switch (action.type) {
+    case GET_ALL_INFO: return state;
+    default: return state;
+  }
+}
+
 const todoApp = combineReducers({
+  getAllInfo,
   visibilityFilter,
   todos
 });
