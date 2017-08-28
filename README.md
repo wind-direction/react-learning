@@ -69,3 +69,4 @@ $ ln -s ../local/lib/node/bin/npm npm
 ## 附录
 
 [vikingmute:React全栈(Redux+Flux+webpack+Babel整合开发)](git@github.com:vikingmute/webpack-react-codes.git)
+
